@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FPOWS Project Plan</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 10px; color: #111827; background: white; }
+
+  /* ── COVER ── */
+  .cover {
+    width: 210mm; height: 297mm;
+    background: linear-gradient(150deg, #7f1d1d 0%, #b91c1c 50%, #1a1a2e 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: white; page-break-after: always; position: relative;
+  }
+  .cover-icon  { font-size: 64px; margin-bottom: 24px; opacity: .9; }
+  .cover-title { font-size: 56px; font-weight: 800; letter-spacing: 10px; margin-bottom: 8px; }
+  .cover-sub   { font-size: 15px; font-weight: 300; letter-spacing: 3px; opacity: .8; margin-bottom: 6px; }
+  .cover-tag   { font-size: 11px; opacity: .5; letter-spacing: 1px; margin-bottom: 36px; }
+  .cover-hr    { width: 60px; height: 2px; background: rgba(255,255,255,.25); margin: 0 auto 30px; }
+  .cover-doc   { font-size: 20px; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+  .cover-meta  { font-size: 11px; opacity: .45; line-height: 2; }
+  .cover-live  { font-size: 12px; font-weight: 600; opacity: .75; margin-top: 18px; border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: 5px 18px; display: inline-block; }
+
+  /* ── PAGE ── */
+  .page {
+    width: 210mm; min-height: 297mm;
+    padding: 12mm 14mm 10mm;
+    page-break-after: always;
+    position: relative;
+  }
+  .ph {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 2px solid #dc2626;
+    padding-bottom: 3mm; margin-bottom: 6mm;
+  }
+  .ph-title { font-size: 20px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px; }
+  .ph-title::before { content: ''; display: inline-block; width: 10px; height: 10px; background: #dc2626; border-radius: 50%; }
+  .ph-sub { font-size: 9px; color: #9ca3af; }
+
+  /* ── SECTION LABEL ── */
+  .sl { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; color: #374151; text-transform: uppercase; margin-bottom: 4px; margin-top: 5mm; }
+  .sl:first-child { margin-top: 0; }
+
+  /* ── CARDS ── */
+  .card { border: 1px solid #e5e7eb; border-radius: 6px; padding: 4mm 4.5mm; margin-bottom: 3mm; }
+  .card-red { border-left: 3px solid #dc2626; background: #fafafa; }
+
+  /* ── TWO COLUMNS ── */
+  .tc { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+
+  /* ── PHASE TABLE ── */
+  .phases { width: 100%; border-collapse: collapse; font-size: 9px; }
+  .phases thead tr { background: #1f2937; color: white; }
+  .phases th { padding: 5px 8px; text-align: left; font-weight: 600; letter-spacing: .3px; }
+  .phases tbody tr:nth-child(even) { background: #f9fafb; }
+  .phases td { padding: 5px 8px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+  .phases td:first-child { white-space: nowrap; }
+
+  /* ── STATUS BADGES ── */
+  .done    { display: inline-block; background: #16a34a; color: white; border-radius: 3px; padding: 1.5px 6px; font-size: 7.5px; font-weight: 700; }
+  .live    { display: inline-block; background: #dc2626; color: white; border-radius: 3px; padding: 1.5px 6px; font-size: 7.5px; font-weight: 700; }
+  .next    { display: inline-block; background: #d97706; color: white; border-radius: 3px; padding: 1.5px 6px; font-size: 7.5px; font-weight: 700; }
+  .planned { display: inline-block; background: #6b7280; color: white; border-radius: 3px; padding: 1.5px 6px; font-size: 7.5px; font-weight: 700; }
+
+  /* ── FEATURE LIST ── */
+  .fl li { font-size: 8.5px; color: #374151; line-height: 1.8; padding-left: 8px; list-style: none; }
+  .fl li::before { content: '▸'; color: #dc2626; margin-right: 4px; font-size: 8px; }
+
+  /* ── KV ── */
+  .kv  { display: flex; border-bottom: 1px solid #f3f4f6; padding: 3px 0; font-size: 8.5px; }
+  .kvk { width: 42%; color: #6b7280; }
+  .kvv { width: 58%; color: #111827; font-weight: 500; }
+
+  /* ── TIMELINE ── */
+  .tl { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 8px; align-items: flex-start; padding: 3.5px 0; }
+  .tl-dot  { width: 16px; height: 16px; min-width: 16px; border-radius: 50%; background: #dc2626; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .tl-dot-gray { background: #9ca3af; }
+  .tl-dot-amber { background: #d97706; }
+  .tl-dot svg { width: 8px; height: 8px; fill: white; }
+  .tl-line { border-left: 1.5px dashed #e5e7eb; margin-left: 7px; height: 5px; }
+  .tl-title { font-size: 9.5px; font-weight: 700; color: #111827; }
+  .tl-desc  { font-size: 8px; color: #6b7280; margin-top: 1px; line-height: 1.4; }
+
+  /* ── STAT BOXES ── */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 5mm; }
+  .stat { border: 1px solid #e5e7eb; border-radius: 6px; padding: 3.5mm; text-align: center; border-top: 3px solid #dc2626; }
+  .stat-num { font-size: 24px; font-weight: 800; color: #dc2626; line-height: 1; }
+  .stat-lbl { font-size: 7.5px; color: #6b7280; margin-top: 3px; letter-spacing: .5px; text-transform: uppercase; }
+
+  /* ── INFO BOX ── */
+  .info { background: #fdf2f2; border-left: 3px solid #dc2626; border-radius: 0 4px 4px 0; padding: 3mm 4mm; font-size: 8.5px; color: #374151; line-height: 1.6; margin-bottom: 3mm; }
+
+  .gap3 { height: 3mm; }
+  .gap4 { height: 4mm; }
+  .gap2 { height: 2mm; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-icon">🔥</div>
+  <div class="cover-title">FPOWS</div>
+  <div class="cover-sub">Field Protection Operations Web System</div>
+  <div class="cover-tag">REDMEN Fire Protection · Australia</div>
+  <div class="cover-hr"></div>
+  <div class="cover-doc">PROJECT PLAN & ROADMAP</div>
+  <div class="cover-meta">
+    Version 1.4.0 · May 2026<br>
+    Prepared by Bryan Morales<br>
+    Started: 17 March 2026
+  </div>
+  <div class="cover-live">🟢 LIVE · redmen.simprosuite.com</div>
+</div>
+
+<!-- PAGE 1: PROJECT OVERVIEW & STATS -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Project Overview</div><div class="ph-sub">1 / 4</div></div>
+
+  <div class="info">
+    FPOWS is a custom-built automation platform that sits on top of REDMEN's live simPRO instance (<strong>redmen.simprosuite.com</strong>). It eliminates manual job lookups, automates call sheet emails, writes asset service dates back to simPRO, and delivers daily and bi-weekly management reports — all without any manual data entry.
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num">51</div><div class="stat-lbl">Git Commits</div></div>
+    <div class="stat"><div class="stat-num">64</div><div class="stat-lbl">Days in Dev</div></div>
+    <div class="stat"><div class="stat-num">14</div><div class="stat-lbl">API Endpoints</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-lbl">Phases</div></div>
+  </div>
+
+  <div class="tc">
+    <div>
+      <div class="sl">PROJECT DETAILS</div>
+      <div class="card">
+        <div class="kv"><span class="kvk">Project name</span><span class="kvv">FPOWS — Fire Protection Outstanding Works Status</span></div>
+        <div class="kv"><span class="kvk">Developer</span><span class="kvv">Bryan Morales</span></div>
+        <div class="kv"><span class="kvk">Start date</span><span class="kvv">17 March 2026</span></div>
+        <div class="kv"><span class="kvk">Current version</span><span class="kvv">v1.4.0 (Live Production)</span></div>
+        <div class="kv"><span class="kvk">Live URL</span><span class="kvv">bryan-fpows-yp3n3hflwa-ts.a.run.app</span></div>
+        <div class="kv"><span class="kvk">simPRO instance</span><span class="kvv">redmen.simprosuite.com (LIVE)</span></div>
+        <div class="kv"><span class="kvk">Hosting</span><span class="kvv">Google Cloud Run — australia-southeast1</span></div>
+        <div class="kv"><span class="kvk">Runtime</span><span class="kvv">Node.js ESM · Express 5</span></div>
+        <div class="kv"><span class="kvk">Deployment</span><span class="kvv">deploy.ps1 → gcloud run deploy</span></div>
+        <div class="kv"><span class="kvk">Scheduler</span><span class="kvv">Google Cloud Scheduler (6am Asia/Manila)</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl">CURRENT CAPABILITIES</div>
+      <div class="card">
+        <ul class="fl">
+          <li>Live job schedule viewer (today's jobs from simPRO)</li>
+          <li>Smart customer search with 60s cache + overdue flags</li>
+          <li>Full job detail — site, client, service dates, outstanding works</li>
+          <li>Automated call sheet emails with logo attachment</li>
+          <li>Writes asset service dates back to simPRO after each job</li>
+          <li>Daily 6am portfolio report to management</li>
+          <li>Bi-weekly master activity summary email</li>
+          <li>Live presence tracking — who's viewing each job</li>
+          <li>FRED — Field Resource Enquiry Dispatch (AI assistant)</li>
+          <li>AFSS Due date read from site PublicNotes in simPRO — real date, not a calculation</li>
+          <li>6/12 Monthly service dates from Customer Assets — shows "—" if no record exists</li>
+          <li>Full email history log with admin delete</li>
+          <li>Admin panel with manual report trigger</li>
+          <li>Security: API key auth, rate limiting, helmet, trust proxy</li>
+        </ul>
+      </div>
+
+      <div class="sl" style="margin-top:4mm">CONNECTED SYSTEMS</div>
+      <div class="card">
+        <div class="kv"><span class="kvk">simPRO REST API</span><span class="kvv">Jobs, customers, sites, assets, schedules</span></div>
+        <div class="kv"><span class="kvk">Gmail SMTP</span><span class="kvv">Call sheets + management reports</span></div>
+        <div class="kv"><span class="kvk">Cloud Scheduler</span><span class="kvv">Automated 6am daily trigger</span></div>
+        <div class="kv"><span class="kvk">Cloud Run</span><span class="kvv">Always-on hosting, auto-scales</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: PHASES COMPLETED -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Delivery Phases — Completed</div><div class="ph-sub">2 / 4</div></div>
+
+  <table class="phases">
+    <thead>
+      <tr>
+        <th style="width:22px">#</th>
+        <th style="width:95px">Phase</th>
+        <th style="width:80px">Period</th>
+        <th>What Was Delivered</th>
+        <th style="width:48px">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Foundation</strong></td>
+        <td>Mar 17–24</td>
+        <td>Express server, simPRO API client (axios, bearer auth, 429 backoff), basic job lookup, dotenv config</td>
+        <td><span class="done">DONE</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Job Detail UI</strong></td>
+        <td>Mar 25 – Apr 3</td>
+        <td>index.html dashboard, job detail modal, description cleaning (30+ boilerplate patterns), service date display, outstanding works table</td>
+        <td><span class="done">DONE</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Email & Call Sheet</strong></td>
+        <td>Apr 4–10</td>
+        <td>Nodemailer SMTP integration, branded HTML call sheet email with logo CID, email history JSONL log, admin log viewer and delete</td>
+        <td><span class="done">DONE</span></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Customer Search</strong></td>
+        <td>Apr 11–18</td>
+        <td>Smart customer search modal, 60s in-memory cache, ★ Major priority tagging, overdue flags (30+ days), job history per customer (last 30), site wildcard fallback search</td>
+        <td><span class="done">DONE</span></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Reporting & Scheduler</strong></td>
+        <td>Apr 19–28</td>
+        <td>Daily 6am portfolio report (node-cron + Cloud Scheduler), site discovery from email logs, staggered API fetching, last_daily_report.txt status file</td>
+        <td><span class="done">DONE</span></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Presence & Asset Sync</strong></td>
+        <td>Apr 29 – May 10</td>
+        <td>Live presence tracking (heartbeat/leave/get), in-memory Map with 15s expiry, asset service date write-back via PATCH to customerAssets endpoint, throttled batch sync (3 at a time, 300ms delay)</td>
+        <td><span class="done">DONE</span></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>Intelligence & Security</strong></td>
+        <td>May 11–20</td>
+        <td>FRED AI assistant (Field Resource Enquiry Dispatch), bi-weekly master activity summary, security hardening (trust proxy, helmet, rate limit corrections), Dockerfile fix (omit dev deps), req.body safety guard</td>
+        <td><span class="live">LIVE</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="gap4"></div>
+
+  <div class="sl">DEVELOPMENT TIMELINE</div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot"><svg viewBox="0 0 10 10"><path d="M2,5 L4.5,7.5 L8,3"/></svg></div>
+      <div><div class="tl-title">Mar 17 — Project kickoff & foundation</div><div class="tl-desc">Express server, simPRO API client, dotenv, basic job fetch</div></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-item">
+      <div class="tl-dot"><svg viewBox="0 0 10 10"><path d="M2,5 L4.5,7.5 L8,3"/></svg></div>
+      <div><div class="tl-title">Apr 4 — Email call sheet live</div><div class="tl-desc">Nodemailer, branded HTML email, logo attachment, email history log</div></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-item">
+      <div class="tl-dot"><svg viewBox="0 0 10 10"><path d="M2,5 L4.5,7.5 L8,3"/></svg></div>
+      <div><div class="tl-title">Apr 11 — Customer search deployed</div><div class="tl-desc">Smart cache, Major tagging, overdue flags, job history per customer</div></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-item">
+      <div class="tl-dot"><svg viewBox="0 0 10 10"><path d="M2,5 L4.5,7.5 L8,3"/></svg></div>
+      <div><div class="tl-title">Apr 19 — Daily 6am report automated</div><div class="tl-desc">Cloud Scheduler + node-cron, portfolio summary email, staggered API fetch</div></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-item">
+      <div class="tl-dot"><svg viewBox="0 0 10 10"><path d="M2,5 L4.5,7.5 L8,3"/></svg></div>
+      <div><div class="tl-title">May 11 — Presence tracking + asset sync</div><div class="tl-desc">Live presence map, heartbeat API, simPRO asset date write-back via PATCH</div></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-item">
+      <div class="tl-dot"><svg viewBox="0 0 10 10"><path d="M2,5 L4.5,7.5 L8,3"/></svg></div>
+      <div><div class="tl-title">May 20 — FRED + security hardening (current)</div><div class="tl-desc">AI assistant renamed FRED, bi-weekly reports, trust proxy fix, Dockerfile fix, rate limit corrections</div></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-item">
+      <div class="tl-dot tl-dot-amber"></div>
+      <div><div class="tl-title">Next — Persistent email storage & roadmap items</div><div class="tl-desc">See roadmap on next page</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: ROADMAP -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Roadmap — Upcoming Work</div><div class="ph-sub">3 / 4</div></div>
+
+  <table class="phases">
+    <thead>
+      <tr>
+        <th style="width:70px">Priority</th>
+        <th style="width:140px">Feature</th>
+        <th>Description & Business Value</th>
+        <th style="width:55px">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Short Term</strong></td>
+        <td>Persistent Email History</td>
+        <td>Email history currently resets when Cloud Run container restarts. Move to a persistent store (Cloud Storage or Firestore) so no history is ever lost between deployments.</td>
+        <td><span class="next">NEXT</span></td>
+      </tr>
+      <tr>
+        <td><strong>Medium Term</strong></td>
+        <td>GoFormz Integration</td>
+        <td>Auto-fill GoFormz inspection forms using simPRO job data — client name, site address, asset types, service dates. Eliminates double data entry for field technicians.</td>
+        <td><span class="planned">PLANNED</span></td>
+      </tr>
+      <tr>
+        <td><strong>Medium Term</strong></td>
+        <td>Mobile-Friendly UI</td>
+        <td>Responsive redesign so technicians can use FPOWS on phones and tablets in the field — view jobs, send call sheets, and update asset dates on site.</td>
+        <td><span class="planned">PLANNED</span></td>
+      </tr>
+      <tr>
+        <td><strong>Medium Term</strong></td>
+        <td>Individual User Logins</td>
+        <td>Replace the single shared admin key with per-user authentication (Google OAuth or similar). Enables audit trails, permission levels, and personalised dashboards.</td>
+        <td><span class="planned">PLANNED</span></td>
+      </tr>
+      <tr>
+        <td><strong>Long Term</strong></td>
+        <td>Analytics Dashboard</td>
+        <td>Visual charts showing call sheet volume over time, overdue site trends, service date compliance rates, and which customers are contacted most frequently.</td>
+        <td><span class="planned">PLANNED</span></td>
+      </tr>
+      <tr>
+        <td><strong>Long Term</strong></td>
+        <td>FRED Enhancements</td>
+        <td>Expand FRED's capabilities — natural language queries ("show me all overdue Major clients"), proactive alerts, and integration with the daily report for voice-style summaries.</td>
+        <td><span class="planned">PLANNED</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="gap4"></div>
+
+  <div class="tc">
+    <div>
+      <div class="sl">KNOWN ISSUES (as of May 2026)</div>
+      <div class="card card-red">
+        <ul class="fl">
+          <li>Email history resets on container restart (Cloud Run ephemeral filesystem)</li>
+          <li>node-cron re-registers on every cold start — Cloud Scheduler is the reliable fallback</li>
+          <li>No per-user login — single admin key shared across team</li>
+          <li>Customer search cache is in-memory — resets on restart</li>
+        </ul>
+      </div>
+
+      <div class="sl" style="margin-top:4mm">RECENTLY FIXED (May 2026)</div>
+      <div class="card">
+        <ul class="fl">
+          <li>Puppeteer blocking Cloud Run Docker builds → fixed with <code>--omit=dev</code></li>
+          <li>express-rate-limit throwing ValidationErrors on every Cloud Run request → fixed with <code>trust proxy: 1</code></li>
+          <li><code>req.body</code> undefined crash on /api/presence/leave → fixed with <code>|| {}</code> guard</li>
+          <li>Rate limit values in docs were incorrect → corrected to match code</li>
+          <li>FPOWS Assistant renamed to FRED across all UI and emails</li>
+          <li>AFSS Due was showing <code>DateIssued + 1 year</code> (wrong) → now reads from site <code>PublicNotes</code> in simPRO</li>
+          <li>AFSS field was reading wrong API field (<code>Notes</code>) → corrected to <code>PublicNotes</code></li>
+          <li>No AFSS in site notes → shows "No AFSS Due" instead of a misleading calculated date</li>
+          <li>Service due dates with no asset record → shows "—" instead of inferred job date</li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl">DEPLOYMENT PROCESS</div>
+      <div class="card" style="margin-bottom:3mm">
+        <ul class="fl">
+          <li>Test locally: <code>yarn dev</code> → verify at localhost:3000</li>
+          <li>Deploy to production: <code>.\deploy.ps1</code></li>
+          <li>Script reads .env, injects all env vars into Cloud Run</li>
+          <li>gcloud builds Docker image from source (--omit=dev)</li>
+          <li>Cloud Scheduler job recreated at 6am Asia/Manila</li>
+          <li>Total deploy time: ~2–3 minutes</li>
+        </ul>
+      </div>
+
+      <div class="sl">RISK REGISTER</div>
+      <div class="card">
+        <div class="kv"><span class="kvk">simPRO API downtime</span><span class="kvv">Retry logic with 3x exponential backoff handles transient failures</span></div>
+        <div class="kv"><span class="kvk">Email history loss</span><span class="kvv">High risk — mitigated in roadmap by persistent storage</span></div>
+        <div class="kv"><span class="kvk">Rate limit exceeded</span><span class="kvv">Batch throttling (300ms gap) prevents 429s from simPRO</span></div>
+        <div class="kv"><span class="kvk">Unauthorised access</span><span class="kvv">ADMIN_API_KEY + rate limiting + HTTPS mitigates</span></div>
+        <div class="kv"><span class="kvk">Cold start latency</span><span class="kvv">Cloud Run keeps container warm; Cloud Scheduler handles timing</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: TECH STACK & SIGN-OFF -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Tech Stack & Sign-off</div><div class="ph-sub">4 / 4</div></div>
+
+  <div class="tc">
+    <div>
+      <div class="sl">TECH STACK</div>
+      <div class="card" style="margin-bottom:4mm">
+        <div class="kv"><span class="kvk">Runtime</span><span class="kvv">Node.js 20 (ESM modules)</span></div>
+        <div class="kv"><span class="kvk">Framework</span><span class="kvv">Express 5</span></div>
+        <div class="kv"><span class="kvk">HTTP client</span><span class="kvv">axios (15s timeout, retry backoff)</span></div>
+        <div class="kv"><span class="kvk">Email</span><span class="kvv">nodemailer (Gmail SMTP port 465)</span></div>
+        <div class="kv"><span class="kvk">Scheduler</span><span class="kvv">node-cron + Google Cloud Scheduler</span></div>
+        <div class="kv"><span class="kvk">Security</span><span class="kvv">helmet + express-rate-limit + trust proxy</span></div>
+        <div class="kv"><span class="kvk">Validation</span><span class="kvv">zod (MCP tools), URL sanitisation</span></div>
+        <div class="kv"><span class="kvk">MCP / AI</span><span class="kvv">fastmcp + @modelcontextprotocol/sdk + @google/adk</span></div>
+        <div class="kv"><span class="kvk">Config</span><span class="kvv">dotenv (.env gitignored)</span></div>
+        <div class="kv"><span class="kvk">Container</span><span class="kvv">Docker (node:20-slim, --omit=dev)</span></div>
+        <div class="kv"><span class="kvk">Cloud</span><span class="kvv">Google Cloud Run · australia-southeast1</span></div>
+        <div class="kv"><span class="kvk">Deploy</span><span class="kvv">deploy.ps1 (PowerShell)</span></div>
+      </div>
+
+      <div class="sl">ENVIRONMENT VARIABLES</div>
+      <div class="card">
+        <div class="kv"><span class="kvk">SIMPRO_BASE_URL</span><span class="kvv">https://redmen.simprosuite.com</span></div>
+        <div class="kv"><span class="kvk">SIMPRO_ACCESS_TOKEN</span><span class="kvv">Bearer token for simPRO API</span></div>
+        <div class="kv"><span class="kvk">SIMPRO_COMPANY_ID</span><span class="kvv">1</span></div>
+        <div class="kv"><span class="kvk">SMTP_USER</span><span class="kvv">bryan.morales@redadair.com.au</span></div>
+        <div class="kv"><span class="kvk">SMTP_PASS</span><span class="kvv">App password (Gmail)</span></div>
+        <div class="kv"><span class="kvk">MANAGER_EMAIL</span><span class="kvv">Report recipient</span></div>
+        <div class="kv"><span class="kvk">ADMIN_API_KEY</span><span class="kvv">Admin route authentication key</span></div>
+        <div class="kv"><span class="kvk">PORT</span><span class="kvv">Cloud Run sets this (default 3000 local)</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl">API ENDPOINT SUMMARY</div>
+      <div class="card" style="margin-bottom:4mm">
+        <div class="kv"><span class="kvk">GET /api/schedules/today</span><span class="kvv">Today's jobs from simPRO</span></div>
+        <div class="kv"><span class="kvk">GET /api/job/:id</span><span class="kvv">Full job detail (fetchFpowData)</span></div>
+        <div class="kv"><span class="kvk">GET /api/customers/search</span><span class="kvv">Smart cached customer search</span></div>
+        <div class="kv"><span class="kvk">GET /api/customers/:id/jobs</span><span class="kvv">Last 30 jobs per customer</span></div>
+        <div class="kv"><span class="kvk">GET /api/latest-job</span><span class="kvv">Most recent active job</span></div>
+        <div class="kv"><span class="kvk">GET /api/ping</span><span class="kvv">Connectivity check</span></div>
+        <div class="kv"><span class="kvk">POST /api/send-email</span><span class="kvv">Send call sheet email</span></div>
+        <div class="kv"><span class="kvk">POST /api/presence/heartbeat</span><span class="kvv">Record user viewing job</span></div>
+        <div class="kv"><span class="kvk">POST /api/presence/leave</span><span class="kvv">Remove user from job view</span></div>
+        <div class="kv"><span class="kvk">GET /api/presence/:jobId</span><span class="kvv">List current job viewers</span></div>
+        <div class="kv"><span class="kvk">GET /api/logs ⬡</span><span class="kvv">Email history (admin)</span></div>
+        <div class="kv"><span class="kvk">POST /api/delete-history ⬡</span><span class="kvv">Delete log entry (admin)</span></div>
+        <div class="kv"><span class="kvk">GET /api/trigger-manager-report ⬡</span><span class="kvv">Manual report trigger (admin)</span></div>
+        <div class="kv"><span class="kvk">GET /health</span><span class="kvv">Cloud Run health probe</span></div>
+      </div>
+
+      <div class="sl">SIGN-OFF</div>
+      <div class="card card-red">
+        <div class="kv"><span class="kvk">Prepared by</span><span class="kvv">Bryan Morales</span></div>
+        <div class="kv"><span class="kvk">Organisation</span><span class="kvv">REDMEN Fire Protection (Labrobin Pty Ltd)</span></div>
+        <div class="kv"><span class="kvk">Document version</span><span class="kvv">v1.4.0</span></div>
+        <div class="kv"><span class="kvk">Date</span><span class="kvv">20 May 2026</span></div>
+        <div class="kv"><span class="kvk">simPRO environment</span><span class="kvv">LIVE — redmen.simprosuite.com only</span></div>
+        <div class="kv"><span class="kvk">Next review</span><span class="kvv">On completion of persistent storage feature</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: auto; padding-top: 8mm; text-align: center; font-size: 8px; color: #9ca3af; border-top: 1px solid #f3f4f6;">
+    FPOWS v1.4.0 · REDMEN Fire Protection · Prepared by Bryan Morales · May 2026 · LIVE: redmen.simprosuite.com · ⬡ = admin key required
+  </div>
+</div>
+
+</body>
+</html>

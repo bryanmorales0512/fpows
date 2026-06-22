@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FPOWS System Documentation</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 10px; color: #111827; background: white; }
+
+  /* ── COVER ── */
+  .cover {
+    width: 210mm; height: 297mm;
+    background: linear-gradient(160deg, #b71c1c 0%, #6b0000 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: white; page-break-after: always;
+  }
+  .cover-icon  { font-size: 70px; margin-bottom: 30px; opacity: .88; }
+  .cover-title { font-size: 58px; font-weight: 800; letter-spacing: 8px; margin-bottom: 14px; }
+  .cover-ver   { font-size: 13px; font-weight: 400; opacity: .5; letter-spacing: 1px; margin-bottom: 20px; }
+  .cover-sub   { font-size: 18px; font-weight: 300; letter-spacing: 2.5px; opacity: .82; margin-bottom: 42px; }
+  .cover-hr    { width: 56px; height: 2px; background: rgba(255,255,255,.3); margin: 0 auto 32px; }
+  .cover-desc  { font-size: 13px; opacity: .72; line-height: 2.2; }
+  .cover-meta  { font-size: 11px; opacity: .42; margin-top: 22px; letter-spacing: .5px; }
+
+  /* ── PAGES ── */
+  .page {
+    width: 210mm; height: 297mm;
+    padding: 13mm 14mm 10mm;
+    page-break-after: always;
+    overflow: hidden; position: relative;
+  }
+  .ph {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1.5px solid #e5e7eb;
+    padding-bottom: 3.5mm; margin-bottom: 6mm;
+  }
+  .ph-title {
+    font-size: 21px; font-weight: 700; color: #111827;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .ph-title::before {
+    content: ''; display: inline-block;
+    width: 10px; height: 10px; background: #dc2626; border-radius: 50%;
+  }
+  .ph-num { font-size: 11px; color: #9ca3af; }
+
+  /* ── LABELS ── */
+  .sl {
+    font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
+    color: #374151; text-transform: uppercase;
+    margin-bottom: 4px; margin-top: 5.5mm;
+  }
+  .sl:first-child { margin-top: 0; }
+
+  /* ── LAYERS ── */
+  .layer {
+    border-left: 3px solid #dc2626;
+    padding: 3mm 4mm; margin-bottom: 2.5mm;
+    background: #fafafa; border-radius: 0 4px 4px 0;
+  }
+  .lt { font-size: 9px; font-weight: 700; color: #dc2626; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 3.5px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 3.5px; }
+  .tag  { background: white; border: 1px solid #e5e7eb; border-radius: 3px; padding: 2px 5px; font-size: 8.5px; color: #374151; }
+
+  /* ── TWO-COL ── */
+  .tc { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5mm; }
+
+  /* ── CARD ── */
+  .card { border: 1px solid #e5e7eb; border-radius: 6px; padding: 4mm 4.5mm; }
+  .ct   { font-size: 9px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3.5mm; }
+
+  /* ── TABLE ── */
+  table { width: 100%; border-collapse: collapse; font-size: 9px; }
+  thead tr { background: #1f2937; color: white; }
+  thead th { padding: 5px 7px; text-align: left; font-weight: 600; letter-spacing: .3px; }
+  tbody tr:nth-child(even) { background: #f9fafb; }
+  tbody td { padding: 4px 7px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+
+  .b { display: inline-block; padding: 1.5px 5px; border-radius: 3px; font-size: 7.5px; font-weight: 700; color: white; }
+  .get   { background: #16a34a; }
+  .post  { background: #d97706; }
+  .admin { background: #7c3aed; }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; }
+  .step  { display: flex; align-items: flex-start; gap: 7px; padding: 3.5px 0; }
+  .sn {
+    width: 19px; height: 19px; min-width: 19px;
+    background: #dc2626; color: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+  }
+  .sb { flex: 1; padding-top: 1px; }
+  .stl { font-size: 9.5px; font-weight: 700; color: #111827; }
+  .sdc { font-size: 8.5px; color: #6b7280; margin-top: 1px; line-height: 1.35; }
+  .sdv { border: none; border-bottom: 1px dashed #e5e7eb; }
+
+  /* ── KV LIST ── */
+  .kv  { display: flex; border-bottom: 1px solid #f3f4f6; padding: 3px 0; font-size: 8.5px; }
+  .kvk { width: 44%; color: #6b7280; }
+  .kvv { width: 56%; color: #111827; font-weight: 500; }
+
+  /* ── FEATURE LIST ── */
+  .fl li { font-size: 8.5px; color: #374151; line-height: 1.7; padding-left: 8px; list-style: none; }
+  .fl li::before { content: '▸'; color: #dc2626; margin-right: 4px; font-size: 8px; }
+
+  /* ── ENV GRID ── */
+  .env { display: flex; flex-wrap: wrap; gap: 3.5px; border: 1px solid #e5e7eb; border-radius: 5px; padding: 3.5mm; }
+  .env span { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 3px; padding: 2px 5px; font-size: 8px; font-family: 'Courier New', monospace; color: #374151; }
+
+  /* ── INFO BOX ── */
+  .info { background: #fdf2f2; border-left: 3px solid #dc2626; border-radius: 0 4px 4px 0; padding: 3mm 4mm; font-size: 8.5px; color: #374151; line-height: 1.5; }
+
+  .gap3 { height: 3mm; }
+  .gap4 { height: 4mm; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+  <div class="cover-icon">🔥</div>
+  <div class="cover-title">FPOWS</div>
+  <div class="cover-ver">v 1 . 4 . 0</div>
+  <div class="cover-sub">Field Protection Operations Web System</div>
+  <div class="cover-hr"></div>
+  <div class="cover-desc">simPRO Automation Platform — System Documentation</div>
+  <div class="cover-desc">Google Cloud Run · Node.js · Express · node-cron · nodemailer</div>
+  <div class="cover-desc" style="margin-top:10px;font-weight:600;opacity:.9;">LIVE PRODUCTION · redmen.simprosuite.com</div>
+  <div class="cover-meta">REDMEN Fire Protection · Australia · May 2026</div>
+</div>
+
+<!-- ═══════════════ PAGE 1: SYSTEM OVERVIEW ═══════════════ -->
+<div class="page">
+  <div class="ph"><div class="ph-title">System Overview</div><div class="ph-num">1 / 5</div></div>
+
+  <div class="sl">HIGH-LEVEL ARCHITECTURE</div>
+
+  <svg width="100%" viewBox="0 0 570 240" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-bottom:5mm;">
+    <defs>
+      <marker id="a" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L7,3 z" fill="#9ca3af"/>
+      </marker>
+    </defs>
+    <!-- TOP ROW -->
+    <rect x="18"  y="8"  width="120" height="50" rx="6" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="78"  y="30" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#4c1d95">🌐 Browser</text>
+    <text x="78"  y="47" text-anchor="middle" font-family="sans-serif" font-size="9"  fill="#6b7280">(index.html · UI)</text>
+
+    <rect x="218" y="8"  width="130" height="50" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+    <text x="283" y="30" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#14532d">⏰ node-cron</text>
+    <text x="283" y="47" text-anchor="middle" font-family="sans-serif" font-size="9"  fill="#6b7280">(daily 06:00 Asia/Manila)</text>
+
+    <rect x="428" y="8"  width="130" height="50" rx="6" fill="#fef3c7" stroke="#fcd34d" stroke-width="1.5"/>
+    <text x="493" y="30" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#78350f">☁ Cloud Scheduler</text>
+    <text x="493" y="47" text-anchor="middle" font-family="sans-serif" font-size="9"  fill="#6b7280">(manual trigger · ?key=)</text>
+
+    <!-- CENTRE SERVER -->
+    <rect x="178" y="102" width="215" height="56" rx="7" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+    <text x="285" y="126" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="800" fill="#7f1d1d">⚡ Express Server</text>
+    <text x="285" y="146" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#9ca3af">Node.js · Google Cloud Run</text>
+
+    <!-- BOTTOM ROW -->
+    <rect x="18"  y="196" width="130" height="40" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="83"  y="212" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">🔧 simPRO API</text>
+    <text x="83"  y="228" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6b7280">jobs · assets · customers</text>
+
+    <rect x="220" y="196" width="130" height="40" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+    <text x="285" y="212" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#14532d">📧 Gmail SMTP</text>
+    <text x="285" y="228" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6b7280">port 465 · SSL · pool(3)</text>
+
+    <rect x="422" y="196" width="136" height="40" rx="6" fill="#fafafa" stroke="#e5e7eb" stroke-width="1.5"/>
+    <text x="490" y="212" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#374151">📄 email_history.jsonl</text>
+    <text x="490" y="228" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6b7280">local file · Cloud Run</text>
+
+    <!-- ARROWS: top → server -->
+    <line x1="78"  y1="58"  x2="215" y2="102" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="283" y1="58"  x2="283" y2="102" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="493" y1="58"  x2="356" y2="102" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#a)"/>
+    <!-- ARROWS: server → bottom -->
+    <line x1="218" y1="158" x2="105" y2="196" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="285" y1="158" x2="285" y2="196" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="352" y1="158" x2="456" y2="196" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#a)"/>
+    <!-- Bidirectional label -->
+    <text x="152" y="188" font-family="sans-serif" font-size="7.5" fill="#9ca3af" text-anchor="middle">read + write</text>
+  </svg>
+
+  <div class="sl">ARCHITECTURE LAYERS</div>
+
+  <div class="layer">
+    <div class="lt">CLIENT LAYER — WEB UI (index.html · Inter font · glassmorphic control bar)</div>
+    <div class="tags">
+      <span class="tag">Schedule Viewer</span><span class="tag">Customer Search</span><span class="tag">Job Detail Modal</span>
+      <span class="tag">Email Call Sheet</span><span class="tag">Live Presence Tracking</span><span class="tag">Admin Log Viewer</span>
+      <span class="tag">FRED — Field Resource Enquiry Dispatch (AI Assistant)</span>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="lt">API & MIDDLEWARE LAYER — EXPRESS 5 ROUTES</div>
+    <div class="tags">
+      <span class="tag">/api/schedules/today</span><span class="tag">/api/customers/search</span>
+      <span class="tag">/api/job/:id</span><span class="tag">/api/customers/:id/jobs</span>
+      <span class="tag">/api/send-email</span><span class="tag">/api/presence/*</span>
+      <span class="tag">/api/logs</span><span class="tag">/api/delete-history</span>
+      <span class="tag">/api/trigger-manager-report</span>
+      <span class="tag">requireApiKey</span><span class="tag">helmet</span><span class="tag">express-rate-limit</span>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="lt">INTEGRATION LAYER — EXTERNAL SERVICES</div>
+    <div class="tags">
+      <span class="tag">simPRO REST API (axios · 15s timeout · exponential backoff)</span>
+      <span class="tag">Gmail SMTP (nodemailer · pool · retry)</span>
+      <span class="tag">Google Cloud Scheduler</span>
+      <span class="tag">node-cron</span>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="lt">INFRASTRUCTURE LAYER — DEPLOYMENT</div>
+    <div class="tags">
+      <span class="tag">Google Cloud Run</span><span class="tag">Node.js ESM (v18+)</span>
+      <span class="tag">deploy.ps1</span><span class="tag">.env secrets (gitignored)</span>
+      <span class="tag">FastMCP server (simPRO MCP tools)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE 2: WEB UI & FEATURES ═══════════════ -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Web UI &amp; Features</div><div class="ph-num">2 / 5</div></div>
+
+  <div class="tc">
+    <div>
+      <div class="sl" style="margin-top:0">CONTROL BAR</div>
+      <div class="card" style="margin-bottom:3.5mm">
+        <div class="fl"><ul>
+          <li>Sticky glassmorphic bar — rgba(26,26,46,0.85) + backdrop-filter blur</li>
+          <li>FPOWS brand badge with version</li>
+          <li>Customer name / postcode search input (≥2 chars)</li>
+          <li>Job ID quick-lookup field</li>
+          <li>Load Today's Jobs button — hits /api/schedules/today</li>
+          <li>Search Customers button — opens modal</li>
+        </ul></div>
+      </div>
+
+      <div class="sl">CUSTOMER SEARCH — SMART CACHE</div>
+      <div class="card" style="margin-bottom:3.5mm">
+        <div class="ct">Cache Build Process (first open)</div>
+        <div class="steps">
+          <div class="step"><div class="sn">1</div><div class="sb">
+            <div class="stl">Fetch all active jobs</div>
+            <div class="sdc">GET /jobs/?Stage=Pending&Stage=Progress — up to 250, with Tags & DateModified</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">2</div><div class="sb">
+            <div class="stl">Deduplicate by Customer.ID</div>
+            <div class="sdc">Tracks most-recently-modified job per customer; marks overdue if >30 days since DateModified</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">3</div><div class="sb">
+            <div class="stl">Batch enrichment (3 at a time)</div>
+            <div class="sdc">Fetches Tags + Address per customer; 300ms delay between batches to respect simPRO rate limits</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">4</div><div class="sb">
+            <div class="stl">Priority tagging</div>
+            <div class="sdc">Customers with a tag containing "testing" → marked as Major (up to 10 shown with ★)</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">5</div><div class="sb">
+            <div class="stl">Cache stored 60 seconds</div>
+            <div class="sdc">Bypass with ?force=1; fallback to direct simPRO search + site wildcard search if &lt;10 results</div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="sl">LIVE PRESENCE TRACKING</div>
+      <div class="card">
+        <div class="fl"><ul>
+          <li>In-memory Map&lt;jobId, Map&lt;userName, {lastSeen, color}&gt;&gt;</li>
+          <li>POST /api/presence/heartbeat — called every ~10s while job is open</li>
+          <li>Viewer removed if no heartbeat for <strong>15 seconds</strong></li>
+          <li>Cleanup runs every 5 seconds via setInterval</li>
+          <li>Colors assigned deterministically via name hash → 8-color palette</li>
+          <li>Multiple users can view same job simultaneously</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl" style="margin-top:0">JOB DETAIL VIEW</div>
+      <div class="card" style="margin-bottom:3.5mm">
+        <div class="ct">Aggregated by fetchFpowData(jobId)</div>
+        <div class="fl"><ul>
+          <li>Job metadata: ID, name, stage, customer, site</li>
+          <li>Site address: suburb, state, postcode (AU only; hides overseas)</li>
+          <li>Service dates: 6-Monthly and 12-Monthly next-service via ServiceLevels</li>
+          <li>Outstanding works: equipment type + issue description per defect</li>
+          <li>Description cleaning: strips 30+ Redmen boilerplate patterns (techs attending, phone, address, standard scope text, AS/NZ references)</li>
+          <li>Limited to first 15 meaningful lines for display</li>
+        </ul></div>
+      </div>
+
+      <div class="sl">EMAIL CALL SHEET</div>
+      <div class="card" style="margin-bottom:3.5mm">
+        <div class="fl"><ul>
+          <li>POST /api/send-email — rate limited: 5 per 15 min</li>
+          <li>To: recipient email, CC: managerEmail or MANAGER_EMAIL env var</li>
+          <li>Subject: "FPOWS Call Sheet - Job #ID - Client Name"</li>
+          <li>Attaches logo.png (if present) via CID embedding</li>
+          <li>Sent via SMTP with 1-retry fallback (2s delay)</li>
+          <li>Success logged to email_history.jsonl as structured JSON</li>
+        </ul></div>
+      </div>
+
+      <div class="sl">JOB HISTORY MODAL</div>
+      <div class="card" style="margin-bottom:3.5mm">
+        <div class="fl"><ul>
+          <li>GET /api/customers/:id/jobs — last 30 jobs ordered by -ID</li>
+          <li>Filtered to: Pending, Progress, Completed, Invoiced stages</li>
+          <li>Sorted: In Progress → Pending → Completed → Invoiced, then by job ID desc</li>
+        </ul></div>
+      </div>
+
+      <div class="sl">ADMIN PANEL</div>
+      <div class="card">
+        <div class="fl"><ul>
+          <li>Log viewer: GET /api/logs — last 50 entries from email_history.jsonl (reversed)</li>
+          <li>Delete entry: POST /api/delete-history — removes by timestamp match</li>
+          <li>Manual report: GET /api/trigger-manager-report — runs portfolio report on demand</li>
+          <li>All three require <strong>x-admin-key header</strong> or <strong>?key= param</strong></li>
+          <li>Key injected into UI via window.FPOWS_KEY at page load</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE 3: API ROUTES & SECURITY ═══════════════ -->
+<div class="page">
+  <div class="ph"><div class="ph-title">API Routes &amp; Security</div><div class="ph-num">3 / 5</div></div>
+
+  <div class="sl" style="margin-top:0">API ENDPOINTS</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50px">Method</th>
+        <th style="width:190px">Route</th>
+        <th>Description</th>
+        <th style="width:60px">Auth</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="b get">GET</span></td><td>/</td><td>Serve index.html — injects window.FPOWS_KEY server-side before sending</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/version.txt</td><td>Return version file contents</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/schedules/today</td><td>Fetch recent jobs from simPRO (last 50, Pending/Progress stages)</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/job/:id</td><td>Full job detail via fetchFpowData — validates ID is integer 1–9,999,999</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/customers/search</td><td>Smart cached search — builds or queries 60s in-memory customer cache</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/customers/:id/jobs</td><td>Last 30 jobs for a customer, sorted by stage priority then job ID</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/latest-job</td><td>Most recently modified active job; supports ?category=major|regular filter</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/debug-cache</td><td>Inspect top 20 entries in the active customers cache (dev aid)</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/ping</td><td>Lightweight connectivity check — returns ok + ISO timestamp</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/health</td><td>Health probe — 200 if all 4 env vars present; 503 if any missing</td><td>—</td></tr>
+      <tr><td><span class="b post">POST</span></td><td>/api/send-email</td><td>Send job call sheet; attaches logo.png CID; logs to email_history.jsonl</td><td>—</td></tr>
+      <tr><td><span class="b post">POST</span></td><td>/api/presence/heartbeat</td><td>Record user viewing a job — creates/updates in-memory presence entry</td><td>—</td></tr>
+      <tr><td><span class="b post">POST</span></td><td>/api/presence/leave</td><td>Remove user from job presence map immediately</td><td>—</td></tr>
+      <tr><td><span class="b get">GET</span></td><td>/api/presence/:jobId</td><td>List active viewers for a job (runs cleanup before responding)</td><td>—</td></tr>
+      <tr><td><span class="b admin">GET</span></td><td>/api/logs</td><td>Last 50 email history entries (reversed) from email_history.jsonl</td><td>x-admin-key</td></tr>
+      <tr><td><span class="b admin">POST</span></td><td>/api/delete-history</td><td>Delete a single log entry matching the provided timestamp string</td><td>x-admin-key</td></tr>
+      <tr><td><span class="b admin">GET</span></td><td>/api/trigger-manager-report</td><td>Manually trigger the full portfolio summary report email</td><td>x-admin-key</td></tr>
+    </tbody>
+  </table>
+
+  <div class="gap4"></div>
+
+  <div class="tc">
+    <div>
+      <div class="sl" style="margin-top:0">API KEY AUTH FLOW</div>
+      <div class="card">
+        <div class="steps">
+          <div class="step"><div class="sn">1</div><div class="sb">
+            <div class="stl">Startup — load ADMIN_API_KEY from .env</div>
+            <div class="sdc">Deployed to Cloud Run env vars automatically by deploy.ps1</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">2</div><div class="sb">
+            <div class="stl">GET / — inject key into HTML before serving</div>
+            <div class="sdc">html.replace('&lt;head&gt;', '&lt;script&gt;window.FPOWS_KEY=...&lt;/script&gt;') — never in static source</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">3</div><div class="sb">
+            <div class="stl">UI sends x-admin-key header on admin requests</div>
+            <div class="sdc">Cloud Scheduler appends ?key=ADMIN_API_KEY to trigger URL</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">4</div><div class="sb">
+            <div class="stl">requireApiKey middleware validates</div>
+            <div class="sdc">Checks req.headers['x-admin-key'] OR req.query.key — returns 401 if missing or wrong</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl" style="margin-top:0">RATE LIMITING (express-rate-limit)</div>
+      <div class="card" style="margin-bottom:4mm">
+        <table>
+          <thead><tr><th>Limiter</th><th>Window</th><th>Max</th><th>Applied to</th></tr></thead>
+          <tbody>
+            <tr><td>searchLimiter</td><td>1 min</td><td>60</td><td>/api/customers/search</td></tr>
+            <tr><td>emailLimiter</td><td>1 min</td><td>10</td><td>/api/send-email</td></tr>
+            <tr><td>adminLimiter</td><td>1 min</td><td>30</td><td>All 3 admin routes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sl">SECURITY STACK</div>
+      <div class="card">
+        <div class="tags">
+          <span class="tag">helmet (secure HTTP headers)</span>
+          <span class="tag">express-rate-limit</span>
+          <span class="tag">trust proxy: 1 (Cloud Run load balancer)</span>
+          <span class="tag">dotenv (.env gitignored)</span>
+          <span class="tag">ADMIN_API_KEY auth</span>
+          <span class="tag">Zod schema validation (MCP tools)</span>
+          <span class="tag">new URL() sanitisation</span>
+          <span class="tag">Integer range check on job IDs</span>
+          <span class="tag">fs.promises async I/O</span>
+          <span class="tag">No credentials in git history</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE 4: DATA FLOWS ═══════════════ -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Data Flows</div><div class="ph-num">4 / 5</div></div>
+
+  <div class="tc">
+    <div>
+      <div class="sl" style="margin-top:0">ASSET SYNC FLOW (syncAssetDates)</div>
+      <div class="card" style="margin-bottom:4mm">
+        <div class="steps">
+          <div class="step"><div class="sn">1</div><div class="sb">
+            <div class="stl">Trigger — siteId + jobDate + jobType received</div>
+            <div class="sdc">Called after a job is processed; jobType is "6 Monthly" or "12 Monthly"</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">2</div><div class="sb">
+            <div class="stl">Calculate next service date</div>
+            <div class="sdc">6 Monthly → baseDate + 6 months · 12 Monthly → baseDate + 1 year · Formatted as YYYY-MM-DD</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">3</div><div class="sb">
+            <div class="stl">Fetch customer assets for site</div>
+            <div class="sdc">GET /customerAssets/?Site.ID={siteId}&pageSize=250 — includes inline ServiceLevels</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">4</div><div class="sb">
+            <div class="stl">Match service levels by name</div>
+            <div class="sdc">12 Monthly matches: "annual", "12 month", "yearly", "12month"<br/>6 Monthly matches: "6 month", "bi-annual", "half year", "semi-annual"</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">5</div><div class="sb">
+            <div class="stl">PATCH only if date changed</div>
+            <div class="sdc">Compares existing ServiceDate / NextDate — skips PATCH if already correct; writes {ServiceDate, NextDate} per matching service level</div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="sl">EMAIL CALL SHEET FLOW</div>
+      <div class="card">
+        <div class="steps">
+          <div class="step"><div class="sn">1</div><div class="sb">
+            <div class="stl">UI builds HTML email body</div>
+            <div class="sdc">Job detail, cleaned description, service dates, outstanding works — passed as htmlContent in POST body</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">2</div><div class="sb">
+            <div class="stl">Server sends via Gmail SMTP</div>
+            <div class="sdc">To: recipient · CC: managerEmail or MANAGER_EMAIL · CID-attached logo.png · 1 retry on failure</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">3</div><div class="sb">
+            <div class="stl">Log structured entry to email_history.jsonl</div>
+            <div class="sdc">Fields: timestamp, type, jobId, client, clientEmail, managerEmail, subject, siteId, siteName</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl" style="margin-top:0">DAILY PORTFOLIO REPORT (sendManagerDailyReport)</div>
+      <div class="card">
+        <div class="ct">Triggered: 06:00 Asia/Manila daily · or manually via /api/trigger-manager-report</div>
+        <div class="steps">
+          <div class="step"><div class="sn">1</div><div class="sb">
+            <div class="stl">Read email_history.jsonl</div>
+            <div class="sdc">Exit early if file is missing or empty</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">2</div><div class="sb">
+            <div class="stl">Discover active portfolio sites</div>
+            <div class="sdc">Fetches all Pending/Progress jobs (up to 250) — builds Map of unique Site IDs with representative job IDs</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">3</div><div class="sb">
+            <div class="stl">Safety catch — today's schedules</div>
+            <div class="sdc">Fetches /schedules/?Date=today and merges any new site IDs not already discovered</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">4</div><div class="sb">
+            <div class="stl">Merge email history sites</div>
+            <div class="sdc">Adds any siteId from logs not in discovered set; for logs with only jobId, fetches site via job lookup</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">5</div><div class="sb">
+            <div class="stl">Fetch live data per site (staggered)</div>
+            <div class="sdc">Calls fetchFpowData(representativeJobId) for each site — 800ms pause between each to respect API limits</div>
+          </div></div>
+          <hr class="sdv"/>
+          <div class="step"><div class="sn">6</div><div class="sb">
+            <div class="stl">Build &amp; send HTML report email</div>
+            <div class="sdc">One row per site: site name, site ID, 6/12 monthly service dates, outstanding works table · Sent to MANAGER_EMAIL · Status written to last_daily_report.txt</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE 5: INFRASTRUCTURE & CONFIG ═══════════════ -->
+<div class="page">
+  <div class="ph"><div class="ph-title">Infrastructure &amp; Configuration</div><div class="ph-num">5 / 5</div></div>
+
+  <div class="tc">
+    <div>
+      <div class="sl" style="margin-top:0">CLOUD RUN DEPLOYMENT</div>
+      <div class="card" style="margin-bottom:4mm">
+        <div class="ct">Service Configuration</div>
+        <div class="kv"><span class="kvk">Platform</span><span class="kvv">Google Cloud Run</span></div>
+        <div class="kv"><span class="kvk">Runtime</span><span class="kvv">Node.js ESM (v18+)</span></div>
+        <div class="kv"><span class="kvk">Entry point</span><span class="kvv">node server.js</span></div>
+        <div class="kv"><span class="kvk">Port</span><span class="kvv">PORT env var (default 3000)</span></div>
+        <div class="kv"><span class="kvk">Bind</span><span class="kvv">0.0.0.0 (all interfaces)</span></div>
+        <div class="kv"><span class="kvk">Deploy script</span><span class="kvv">deploy.ps1 (PowerShell)</span></div>
+        <div class="kv"><span class="kvk">Startup guard</span><span class="kvv">Throws if SIMPRO_BASE_URL or SIMPRO_ACCESS_TOKEN missing</span></div>
+        <div class="kv"><span class="kvk">Health check</span><span class="kvv">GET /health — 503 if any env var absent</span></div>
+      </div>
+
+      <div class="sl">SMTP CONFIGURATION (nodemailer)</div>
+      <div class="card" style="margin-bottom:4mm">
+        <div class="kv"><span class="kvk">Provider</span><span class="kvv">Gmail (smtp.gmail.com)</span></div>
+        <div class="kv"><span class="kvk">Port / Security</span><span class="kvv">465 / SSL (secure: true)</span></div>
+        <div class="kv"><span class="kvk">Connection pool</span><span class="kvv">pool: true · maxConnections: 3</span></div>
+        <div class="kv"><span class="kvk">Retry logic</span><span class="kvv">1 retry · 2-second delay between attempts</span></div>
+        <div class="kv"><span class="kvk">Credentials</span><span class="kvv">SMTP_USER + SMTP_PASS env vars</span></div>
+        <div class="kv"><span class="kvk">From header</span><span class="kvv">"FRED — FPOWS" &lt;SMTP_USER&gt;</span></div>
+      </div>
+
+      <div class="sl">SIMPRO API CLIENT (getSimpro)</div>
+      <div class="card">
+        <div class="kv"><span class="kvk">Base URL</span><span class="kvv">SIMPRO_BASE_URL → https://redmen.simprosuite.com (LIVE)</span></div>
+        <div class="kv"><span class="kvk">AFSS Due source</span><span class="kvv">Site PublicNotes field — regex parses "AFSS DUE DATE" line; fallback: "No AFSS Due"</span></div>
+        <div class="kv"><span class="kvk">Service due source</span><span class="kvv">Customer Assets ServiceLevels — shows "—" if no matching asset record found</span></div>
+        <div class="kv"><span class="kvk">Auth</span><span class="kvv">Bearer SIMPRO_ACCESS_TOKEN header</span></div>
+        <div class="kv"><span class="kvk">Timeout</span><span class="kvv">15,000ms per request</span></div>
+        <div class="kv"><span class="kvk">Rate limit handling</span><span class="kvv">HTTP 429 → exponential backoff (3 retries, starts 1.5s, doubles)</span></div>
+        <div class="kv"><span class="kvk">URL safety</span><span class="kvv">Validated with new URL() before every request</span></div>
+        <div class="kv"><span class="kvk">Company ID</span><span class="kvv">SIMPRO_COMPANY_ID env var (default "1")</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sl" style="margin-top:0">CRON SCHEDULES</div>
+      <div class="card" style="margin-bottom:4mm">
+        <table>
+          <thead><tr><th>Expression</th><th>Time</th><th>Task</th></tr></thead>
+          <tbody>
+            <tr><td style="font-family:monospace">0 6 * * *</td><td>06:00 Asia/Manila</td><td>Daily portfolio report</td></tr>
+            <tr><td>Ad hoc</td><td>On demand</td><td>Bi-weekly master summary (manual trigger)</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:6px; font-size:8px; color:#6b7280; font-style:italic">Timezone: Asia/Manila (UTC+8). Note: Cloud Run containers restart between requests — node-cron is re-registered on each cold start.</div>
+      </div>
+
+      <div class="sl">ENVIRONMENT VARIABLES</div>
+      <div class="env" style="margin-bottom:4mm">
+        <span>SIMPRO_BASE_URL</span>
+        <span>SIMPRO_ACCESS_TOKEN</span>
+        <span>SIMPRO_COMPANY_ID</span>
+        <span>SMTP_USER</span>
+        <span>SMTP_PASS</span>
+        <span>MANAGER_EMAIL</span>
+        <span>ADMIN_API_KEY</span>
+        <span>PORT</span>
+        <span>NODE_ENV</span>
+      </div>
+
+      <div class="sl">FILE PERSISTENCE</div>
+      <div class="card" style="margin-bottom:4mm">
+        <div class="kv"><span class="kvk">email_history.jsonl</span><span class="kvv">Append-only JSONL — one entry per sent call sheet email</span></div>
+        <div class="kv"><span class="kvk">last_daily_report.txt</span><span class="kvv">ISO timestamp of last successful daily report send</span></div>
+        <div class="kv"><span class="kvk">last_biweekly_report.txt</span><span class="kvv">ISO timestamp of last bi-weekly portfolio summary</span></div>
+        <div class="kv"><span class="kvk">logo.png</span><span class="kvv">Attached to call sheet emails via CID — optional</span></div>
+      </div>
+
+      <div class="sl">TECH STACK</div>
+      <div class="card">
+        <div class="tags">
+          <span class="tag">Node.js (ESM)</span>
+          <span class="tag">Express 5</span>
+          <span class="tag">axios</span>
+          <span class="tag">nodemailer</span>
+          <span class="tag">node-cron</span>
+          <span class="tag">helmet</span>
+          <span class="tag">express-rate-limit</span>
+          <span class="tag">zod</span>
+          <span class="tag">dotenv</span>
+          <span class="tag">fastmcp</span>
+          <span class="tag">@modelcontextprotocol/sdk</span>
+          <span class="tag">@google/adk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

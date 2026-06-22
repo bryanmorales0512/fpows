@@ -1,0 +1,80 @@
+[dotenv@17.3.1] injecting env (6) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[SERVER] FPOWS Automation live on port 3000
+[GET] /api/customers/search?q=3 London
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/jobs/?Stage=Pending&Stage=Progress&pageSize=250&columns=ID,Name,Customer,Site,Status,DateIssued,DateModified,Tags
+[simPRO SUCCESS] /api/v1.0/companies/1/jobs/?Stage=Pending&Stage=Progress&pageSize=250&columns=ID,Name,Customer,Site,Status,DateIssued,DateModified,Tags -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/50886?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/10032?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/50425?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/50886?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/50425?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/10032?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/13476?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/17752?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/50559?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/50559?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/13476?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/17752?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/50978?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/20961?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/343?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/343?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/50978?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/20961?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/16227?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/20984?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/21097?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/16227?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/21097?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/20984?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/4863?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/16906?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/9770?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/9770?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/4863?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/16906?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/4631?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/1410?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/20785?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/4631?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/20785?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/1410?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/14117?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/21685?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/9588?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/21685?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/9588?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/14117?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/19688?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/1400?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/50463?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/1400?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/19688?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/50463?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/6679?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/5404?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/21000?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/5404?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/6679?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/21000?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/20980?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/420?columns=ID,Tags,Address
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/20833?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/420?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/20980?columns=ID,Tags,Address -> 200
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/20833?columns=ID,Tags,Address -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/21606?columns=ID,Tags,Address
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/21606?columns=ID,Tags,Address -> 200
+[SEARCH DEBUG] Cache miss for "3 London". Fetching live fallback...
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/?Search=3%20London&pageSize=20
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/?Search=3%20London&pageSize=20 -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/sites/?Name=%253%20London%25&pageSize=50
+[simPRO SUCCESS] /api/v1.0/companies/1/sites/?Name=%253%20London%25&pageSize=50 -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/sites/12571
+[simPRO SUCCESS] /api/v1.0/companies/1/sites/12571 -> 200
+[simPRO FETCH] URL: https://redmen-uat.simprosuite.com/api/v1.0/companies/1/customers/companies/9770
+[simPRO SUCCESS] /api/v1.0/companies/1/customers/companies/9770 -> 200
+[SEARCH DEBUG] Added High-Priority Customer via Site: CORDINA FOODS PTY LTD
+[SEARCH DEBUG] Merging 21 live results into 0 local results.
+[SEARCH DEBUG] Final filtered length: 21
+[SEARCH DEBUG] Top result: CORDINA FOODS PTY LTD
