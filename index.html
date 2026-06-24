@@ -1759,11 +1759,14 @@
             const stripped = firstLine
                 .replace(/^(qualified\s+)?technician to attend site and investigate\s+(the\s+)?/i, '')
                 .replace(/^(qualified\s+)?technician to attend site\s+/i, '')
+                .replace(/^(the\s+)?(qualified\s+)?technician[s]?\s+will\s+\w+\s+(the\s+|a\s+|an\s+)?/i, '')
                 .replace(/^to re.?attend\s+(to\s+)?/i, '')
                 .replace(/^to attend\s+(to\s+)?/i, '')
                 .replace(/^note:\s*/i, '')
                 .replace(/^and\s+/i, '')
                 .replace(/^to\s+/i, '')
+                // Strip prepositional tails that pad length without adding keyword value
+                .replace(/\s+(shown\s+(on|in)|against\s+the|per\s+the|to\s+match|to\s+verify|using\s+the|from\s+the|at\s+the).*/i, '')
                 .trim();
             const sentence = stripped.match(/^(.+?[.!?])(?:\s|$)/);
             const phrase = (sentence ? sentence[1] : stripped) || firstLine;
