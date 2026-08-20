@@ -1,4 +1,6 @@
-import { sendManagerDailyReport } from './server.js';
+// Import the report service directly (not ../server.js) so this utility does
+// not boot the HTTP server / cron when run standalone.
+import { sendManagerDailyReport } from '../src/services/report.js';
 import dotenv from 'dotenv';
 dotenv.config();
 

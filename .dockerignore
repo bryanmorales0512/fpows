@@ -1,0 +1,17 @@
+# Keep the container image lean and free of secrets / dev-only files.
+node_modules
+.git
+.gitignore
+.env
+.env.example
+*.log
+
+# Docs, tests, dev scripts, and deployment tooling are not needed at runtime
+docs/
+tests/
+scripts/
+deploy/
+*.md
+
+# Legacy / leaked config that must never ship in the image
+env.yaml

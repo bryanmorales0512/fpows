@@ -1,0 +1,54 @@
+========================================================================
+ FPOWS — Requirements & Setup (developer reference)
+========================================================================
+
+NOTE: This is a Node.js project, not a Python project. The authoritative
+dependency manifest is package.json + package-lock.json. This file is a
+human-readable summary; to actually install everything, run:
+
+    npm install
+
+------------------------------------------------------------------------
+ System prerequisites
+------------------------------------------------------------------------
+Node.js        >= 20   (project targets Node 20; tested on Node 24)
+npm            >= 9    (ships with Node)
+git            any recent version
+
+Optional (only for deploying to Google Cloud Run):
+gcloud CLI     authenticated (`gcloud auth login`)
+Docker         Desktop/Engine (deploy.ps1 uses it; falls back to Cloud Build)
+
+------------------------------------------------------------------------
+ Runtime dependencies (installed by `npm install`)
+------------------------------------------------------------------------
+@google/adk                 ^1.0.0
+@modelcontextprotocol/sdk   ^1.27.1
+axios                       ^1.13.6
+body-parser                 ^2.2.2
+dotenv                      ^17.3.1
+express                     ^5.2.1
+express-rate-limit          ^8.5.2
+express-session             ^1.18.1
+fastmcp                     ^3.35.0
+google-auth-library         ^9.15.1
+helmet                      ^8.1.0
+node-cron                   ^3.0.3
+nodemailer                  ^8.0.3
+zod                         ^4.3.6
+
+------------------------------------------------------------------------
+ Dev-only dependencies (for docs/screenshot scripts)
+------------------------------------------------------------------------
+pdfkit                      ^0.18.0
+puppeteer                   ^25.0.4
+
+------------------------------------------------------------------------
+ First-time setup
+------------------------------------------------------------------------
+1. npm install
+2. Copy .env.example -> .env and fill in credentials
+   (see README.md "Environment Variables")
+3. npm start          # http://localhost:3000
+   npm run dev        # auto-reload during development
+========================================================================
