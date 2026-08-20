@@ -46,6 +46,11 @@ export const GOOGLE_CLIENT_SECRET = cleanEnv(process.env.GOOGLE_CLIENT_SECRET);
 export const SESSION_SECRET = cleanEnv(process.env.SESSION_SECRET, 'fpows-dev-secret-change-me');
 export const ALLOWED_EMAIL_DOMAIN = '@redadair.com.au';
 
+// Safety switch: when SIMPRO_READ_ONLY=1, the app makes NO writes to simPRO
+// (skips the background asset-service-date sync). Use this when pointing at a
+// production instance for testing so viewing jobs cannot modify live data.
+export const SIMPRO_READ_ONLY = cleanEnv(process.env.SIMPRO_READ_ONLY) === '1';
+
 export const OAUTH_REDIRECT = process.env.NODE_ENV === 'production'
     ? 'https://fpows.redadair.com.au/auth/callback'
     : 'http://localhost:3000/auth/callback';

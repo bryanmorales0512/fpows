@@ -1,7 +1,7 @@
 // Core FPOW data aggregation: assembles a full job/site/customer picture from
 // simPRO, and keeps asset service dates in sync as a background task.
 import axios from 'axios';
-import { SIMPRO_BASE_URL, SIMPRO_ACCESS_TOKEN, COMPANY_ID } from '../config.js';
+import { SIMPRO_BASE_URL, SIMPRO_ACCESS_TOKEN, COMPANY_ID, SIMPRO_READ_ONLY } from '../config.js';
 import { getSimpro } from './simpro.js';
 import { cleanDescriptionForClient, fullDescriptionForStaff } from './text.js';
 
@@ -11,6 +11,10 @@ import { cleanDescriptionForClient, fullDescriptionForStaff } from './text.js';
  */
 export async function syncAssetDates(siteId, jobDate, jobType) {
     if (!siteId) return;
+    if (SIMPRO_READ_ONLY) {
+        console.log(`[AUTO-SYNC] Skipped — SIMPRO_READ_ONLY=1 (no writes to simPRO)`);
+        return;
+    }
 
     try {
         console.log(`[AUTO-SYNC] Starting asset sync for Site #${siteId} (Type: ${jobType}, Date: ${jobDate})`);
