@@ -1,4 +1,5 @@
-const token = '6c6b91755ff14c8ff1ffb843c0737955d7a3a88a';
+import 'dotenv/config';
+const token = process.env.SIMPRO_ACCESS_TOKEN;
 const url = 'https://redmen-uat.simprosuite.com/api/v1.0/companies/1/jobs/';
 const headers = { Authorization: `Bearer ${token}` };
 
