@@ -77,6 +77,22 @@ scripts/                  # one-off diagnostic/maintenance scripts (+ scratch/, 
 docs/                     # documentation & generated artifacts (briefs, plans, PDFs)
 ```
 
+## Agent (separate, optional — `agent/`)
+
+`agent/` is a **standalone** Google ADK (Python) agent — "FRED" — deployable to
+**Vertex AI Agent Engine** (managed sessions/memory/logging), powered by Gemini.
+It is **not** part of the Node app and requires no UI/feature changes; it
+integrates by calling the FPOWS REST API as **read-only tools** (no email/send
+tool by design).
+
+- Auth: the agent authenticates server-to-server via the `x-agent-key` header,
+  checked in `src/middleware/auth.js` against `AGENT_API_KEY`. Set the same
+  secret in FPOWS `.env` and `agent/.env`.
+- The dashboard's built-in FRED widget is a separate, client-side rule-based
+  helper (no LLM). Wiring it to this deployed agent is an optional future step.
+- New FPOWS env flags: `AGENT_API_KEY` (programmatic API auth) and `DEV_NO_AUTH`
+  (local-only login bypass; ignored when `NODE_ENV=production`).
+
 ## Conventions & gotchas
 
 - **Middleware/route ORDER matters and is centralised in `src/app.js`:** helmet → json → session → `requireAuth` → auth routes → `pagesRouter` (the `/` shell) → `express.static(public/)` → API routers. The `/` route must stay before static.

@@ -1,0 +1,6 @@
+# FPOWS ADK agent — Python dependencies
+# Install:  pip install -r requirements.txt
+google-adk>=1.0.0
+google-cloud-aiplatform[adk,agent_engines]>=1.95.0
+requests>=2.31.0
+python-dotenv>=1.0.0
