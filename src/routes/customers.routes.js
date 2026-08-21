@@ -9,6 +9,11 @@ import { cache } from '../state.js';
 
 export const customersRouter = express.Router();
 
+// Short-TTL cache for the per-customer jobs list — drilling into a customer
+// hits this every time, so cache it briefly (rate-limit protection).
+const _custJobsCache = new Map();
+const CUST_JOBS_TTL_MS = parseInt(process.env.CUST_JOBS_CACHE_TTL_MS || '60000', 10);
+
 // Schedules endpoint
 customersRouter.get('/api/schedules/today', async (req, res) => {
     console.log(`[GET] /api/schedules/today`);
@@ -263,6 +268,10 @@ customersRouter.get('/api/customers/search', searchLimiter, async (req, res) => 
 customersRouter.get('/api/customers/:id/jobs', async (req, res) => {
     const custId = req.params.id;
     console.log(`[GET] /api/customers/${custId}/jobs`);
+    if (req.query.force !== '1') {
+        const hit = _custJobsCache.get(custId);
+        if (hit && (Date.now() - hit.t) < CUST_JOBS_TTL_MS) return res.json({ jobs: hit.jobs, cached: true });
+    }
     try {
         const jobsRes = await getSimpro(`/api/v1.0/companies/${COMPANY_ID}/jobs/?Customer.ID=${custId}&pageSize=30&orderby=-ID&columns=ID,Name,Site,Stage,DateIssued`);
 
@@ -292,6 +301,7 @@ customersRouter.get('/api/customers/:id/jobs', async (req, res) => {
                 return parseInt(b.id) - parseInt(a.id);
             });
 
+        _custJobsCache.set(custId, { t: Date.now(), jobs });
         res.json({ jobs });
     } catch (err) {
         console.error(`[CUSTOMER JOBS ERROR] ${err.message}`);
