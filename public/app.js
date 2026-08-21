@@ -1446,3 +1446,29 @@
                 navigator.sendBeacon('/api/presence/leave', JSON.stringify({ jobId: _currentViewingJobId, userName: _presenceUser }));
             }
         });
+
+/* ── Theme toggle (light / dark) — redesign 2026 ── */
+(function () {
+    var root = document.documentElement;
+    var KEY = 'fpows-theme';
+    try { var saved = localStorage.getItem(KEY); if (saved === 'dark' || saved === 'light') root.setAttribute('data-theme', saved); } catch (e) {}
+    function isDark() {
+        var cur = root.getAttribute('data-theme');
+        return cur === 'dark' || (!cur && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    function paintIcon() {
+        var btn = document.getElementById('btn-theme');
+        if (!btn) return;
+        var ico = btn.querySelector('.theme-ico');
+        if (ico) ico.textContent = isDark() ? '☀️' : '🌙';
+    }
+    document.addEventListener('click', function (e) {
+        var btn = e.target && e.target.closest ? e.target.closest('#btn-theme') : null;
+        if (!btn) return;
+        var next = isDark() ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem(KEY, next); } catch (e2) {}
+        paintIcon();
+    });
+    paintIcon();
+})();

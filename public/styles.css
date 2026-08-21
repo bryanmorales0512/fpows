@@ -1242,3 +1242,279 @@
             color: #888;
             margin-top: 4px;
         }
+
+/* ==========================================================================
+   FPOWS — REDESIGN LAYER  (2026)
+   shadcn-aesthetic reskin. Wrapped in @media screen so PRINT/PDF output is
+   governed only by the original rules + @media print (byte-identical paper).
+   The call-sheet document (#fpows-form) stays a light "paper" surface in both
+   themes; only the surrounding app chrome is themed.
+   ========================================================================== */
+@media screen {
+
+  /* ---- Design tokens: light ---- */
+  :root {
+    --bg: #f5f5f6;
+    --surface: #ffffff;
+    --surface-2: #f3f3f4;
+    --border: #e5e5e7;
+    --border-strong: #d4d4d8;
+    --text: #18181b;
+    --muted: #6b6b74;
+    --faint: #a1a1aa;
+    --brand: #cc2222;
+    --brand-strong: #ac1c1c;
+    --brand-ink: #ffffff;
+    --ring: rgba(204,34,34,.32);
+    --amber:#a45309; --amber-bg:#fdf0dd;
+    --blue:#0369a1;  --blue-bg:#e5f0f8;
+    --green:#15803d; --green-bg:#e5f3ea;
+    --red-soft:#b91c1c; --red-bg:#fcebeb;
+    --r-sm:6px; --r:9px; --r-lg:14px;
+    --sh-1: 0 1px 2px rgba(24,24,27,.07);
+    --sh-2: 0 4px 14px rgba(24,24,27,.09), 0 1px 3px rgba(24,24,27,.06);
+    --sh-doc: 0 24px 60px -22px rgba(24,24,27,.28), 0 6px 16px rgba(24,24,27,.08);
+    /* paper is always light, in both themes */
+    --paper:#ffffff; --paper-ink:#1a1a1a; --paper-border:#e2e2e4; --paper-2:#f7f7f8;
+    color-scheme: light;
+  }
+
+  /* ---- Design tokens: dark (screen only) ---- */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#0b0b0d; --surface:#161619; --surface-2:#1e1e22;
+      --border:#2a2a30; --border-strong:#3a3a42;
+      --text:#fafafa; --muted:#a0a0aa; --faint:#6e6e78;
+      --brand:#f1565b; --brand-strong:#f0555a; --ring:rgba(241,86,91,.36);
+      --amber:#eeb46a; --amber-bg:#39280f;
+      --blue:#7cc4ec; --blue-bg:#102636; --green:#7fd39b; --green-bg:#0f2b1c;
+      --red-soft:#f6817f; --red-bg:#391616;
+      --sh-1: 0 1px 2px rgba(0,0,0,.5);
+      --sh-2: 0 4px 14px rgba(0,0,0,.5);
+      --sh-doc: 0 24px 60px -22px rgba(0,0,0,.7), 0 6px 16px rgba(0,0,0,.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg:#f5f5f6; --surface:#ffffff; --surface-2:#f3f3f4;
+    --border:#e5e5e7; --border-strong:#d4d4d8;
+    --text:#18181b; --muted:#6b6b74; --faint:#a1a1aa;
+    --brand:#cc2222; --brand-strong:#ac1c1c; --ring:rgba(204,34,34,.32);
+    --amber:#a45309; --amber-bg:#fdf0dd; --blue:#0369a1; --blue-bg:#e5f0f8;
+    --green:#15803d; --green-bg:#e5f3ea; --red-soft:#b91c1c; --red-bg:#fcebeb;
+    --sh-1: 0 1px 2px rgba(24,24,27,.07);
+    --sh-2: 0 4px 14px rgba(24,24,27,.09), 0 1px 3px rgba(24,24,27,.06);
+    --sh-doc: 0 24px 60px -22px rgba(24,24,27,.28), 0 6px 16px rgba(24,24,27,.08);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg:#0b0b0d; --surface:#161619; --surface-2:#1e1e22;
+    --border:#2a2a30; --border-strong:#3a3a42;
+    --text:#fafafa; --muted:#a0a0aa; --faint:#6e6e78;
+    --brand:#f1565b; --brand-strong:#f0555a; --ring:rgba(241,86,91,.36);
+    --amber:#eeb46a; --amber-bg:#39280f; --blue:#7cc4ec; --blue-bg:#102636;
+    --green:#7fd39b; --green-bg:#0f2b1c; --red-soft:#f6817f; --red-bg:#391616;
+    --sh-1: 0 1px 2px rgba(0,0,0,.5);
+    --sh-2: 0 4px 14px rgba(0,0,0,.5);
+    --sh-doc: 0 24px 60px -22px rgba(0,0,0,.7), 0 6px 16px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+
+  /* ---- Base / workspace ---- */
+  body {
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:
+      radial-gradient(1100px 380px at 50% -8%, color-mix(in oklab, var(--brand) 7%, transparent), transparent 70%),
+      var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- App bar (was dark glass control bar) ---- */
+  .control-bar {
+    background: color-mix(in oklab, var(--surface) 82%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--sh-1);
+    padding: 11px 20px;
+    gap: 16px;
+    align-items: center;
+  }
+  .control-bar .brand {
+    display:flex; align-items:center; gap:9px;
+    color: var(--text); font-size: 15px; font-weight: 800; letter-spacing:-.01em;
+  }
+  .control-bar .brand .fp-mark { width:22px; height:22px; flex-shrink:0; }
+  .control-bar .brand b { color: var(--brand); }
+  .control-bar .brand .tag {
+    font-size:9.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--muted); border:1px solid var(--border); padding:2px 7px; border-radius:999px;
+  }
+
+  .search-row { gap: 10px; }
+  .search-row input, .search-row select {
+    height: 40px; border-radius: var(--r);
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+    font-size: 13.5px; transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  .search-row input::placeholder { color: var(--faint); }
+  .search-row input:focus, .search-row select:focus {
+    background: var(--surface); border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring);
+  }
+
+  /* ---- Buttons ---- */
+  .btn {
+    height: 40px; padding: 0 15px;
+    background: var(--brand); color: var(--brand-ink);
+    border: 1px solid var(--brand); border-radius: var(--r-sm);
+    box-shadow: var(--sh-1); font-size: 13px; font-weight: 600; letter-spacing: 0; gap: 8px;
+    transition: background .14s, border-color .14s, box-shadow .14s, transform .06s;
+  }
+  .btn:hover { background: var(--brand-strong); border-color: var(--brand-strong); transform: none; box-shadow: var(--sh-1); }
+  .btn:active { transform: translateY(.5px); }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
+  .btn.btn-outline {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); box-shadow: none;
+  }
+  .btn.btn-outline:hover { background: var(--surface-2); border-color: var(--border-strong); color: var(--text); }
+  .btn.btn-icon { width: 40px; padding: 0; justify-content: center; font-size: 15px; }
+
+  /* ---- Status pill ---- */
+  .status-pill {
+    border-radius: 999px; padding: 6px 13px; font-weight: 600; letter-spacing: 0;
+    border: 1px solid var(--border); min-width: 0;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .pill-waiting { background: var(--surface-2); color: var(--muted); border-color: var(--border); }
+  .pill-loading { background: var(--blue-bg); color: var(--blue); border-color: color-mix(in oklab, var(--blue) 30%, transparent); }
+  .pill-done    { background: var(--green-bg); color: var(--green); border-color: color-mix(in oklab, var(--green) 30%, transparent); }
+  .pill-error   { background: var(--red-bg); color: var(--red-soft); border-color: color-mix(in oklab, var(--red-soft) 30%, transparent); }
+
+  /* ---- Presence ---- */
+  .presence-container { gap: 0; }
+  .presence-avatar { width: 30px; height: 30px; border: 2px solid var(--surface); margin-left: -8px; box-shadow: var(--sh-1); }
+  .presence-avatar:first-child { margin-left: 0; }
+  .presence-avatar .pulse-dot { border-color: var(--surface); }
+  .presence-label { color: var(--muted); }
+
+  /* ---- Layout / workspace ---- */
+  .page-wrapper { max-width: 1240px; margin: 26px auto; padding: 0 20px 110px; }
+  .page-layout { gap: 24px; padding: 0; align-items: flex-start; }
+
+  /* ---- Call sheet = white "paper" (light in both themes) ---- */
+  #fpows-form {
+    background: var(--paper); color: var(--paper-ink);
+    border: 1px solid var(--paper-border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-doc);
+  }
+  /* subtle refinement of the paper internals (screen only) */
+  .form-header { border-bottom: 2px solid #2c2c2c; }
+  .company-info { color: #4b5563; }
+  .meta-cell { border-right-color: #ececee; }
+  .meta-row { border-bottom-color: #ececee; }
+  .meta-cell .lbl { color: #9ca3af; letter-spacing: .06em; }
+  .meta-cell .val { color: #18181b; }
+  .works-table td { border-color: #ececee; }
+  .works-table tr:nth-child(even) td { background: var(--paper-2); }
+  [contenteditable="true"]:hover { background-color: color-mix(in oklab, var(--brand) 5%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--brand) 26%, transparent); }
+  [contenteditable="true"]:focus { box-shadow: inset 0 0 0 2px var(--brand); }
+
+  /* ---- Status badges in the works table (screen) ---- */
+  .status-badge {
+    display:inline-flex; align-items:center; gap:5px;
+    padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700;
+    letter-spacing: .02em; border: 1px solid transparent;
+  }
+  .status-badge::before { content:""; width:6px; height:6px; border-radius:999px; background: currentColor; opacity:.9; }
+  .s-completed { background: var(--green-bg); color: var(--green); }
+  .s-pending   { background: var(--amber-bg); color: var(--amber); }
+  .s-na        { background: var(--surface-2); color: var(--muted); }
+  .issue-expand-btn { border-color: var(--brand); color: var(--brand); background: transparent; }
+  .issue-expand-btn:hover { background: var(--brand); color: #fff; }
+
+  /* ---- Dialogs (customer search + history) ---- */
+  .email-modal-overlay { background: color-mix(in oklab, #09090b 62%, transparent); backdrop-filter: blur(4px); }
+  .email-modal {
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-doc); padding: 26px;
+  }
+  .email-modal h2 { color: var(--text); font-size: 1.2rem; letter-spacing:-.01em; }
+  .email-modal .subtitle { color: var(--muted); }
+  .email-modal label { color: var(--muted); }
+  .email-modal input {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: var(--r-sm);
+  }
+  .email-modal input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); background: var(--surface); }
+  #cs-input { width:100%; padding:11px 14px; height:auto; }
+  #cs-results { border-color: var(--border) !important; background: var(--surface); }
+  .email-modal-actions .btn-cancel {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: var(--r-sm);
+  }
+  .email-modal-actions .btn-cancel:hover { background: var(--surface-2); }
+  .email-modal-actions .btn-send {
+    background: var(--green); border: 1px solid var(--green); border-radius: var(--r-sm);
+    box-shadow: var(--sh-1);
+  }
+  .email-modal-actions .btn-send:hover { filter: brightness(.95); transform: none; box-shadow: var(--sh-1); }
+
+  /* customer / job result items */
+  .customer-result-item { border-bottom-color: var(--border); }
+  .customer-result-item:hover { background: var(--surface-2); border-left: 3px solid var(--brand); }
+  .customer-name { color: var(--text); }
+  .customer-type { background: var(--surface-2); color: var(--muted); }
+  .job-item { background: var(--surface-2); border-color: var(--border); }
+  .job-item:hover { border-color: var(--brand); box-shadow: var(--sh-1); }
+  .job-item-header { color: var(--text); }
+  .job-item-site, .job-item-meta { color: var(--muted); }
+
+  /* ---- Assistant sidebar ---- */
+  .agent-sidebar {
+    background: color-mix(in oklab, var(--surface) 96%, transparent);
+    border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-2); top: 92px;
+  }
+  .agent-header { border-bottom-color: var(--border); }
+  .agent-avatar { border-radius: 11px; box-shadow: var(--sh-1); }
+  .agent-info h3 { color: var(--text); }
+  .agent-info p { color: var(--muted); }
+  .insight-card { background: var(--surface); border-color: var(--border); border-radius: var(--r); }
+  .insight-card:hover { border-color: var(--brand); transform: translateY(-1px); }
+  .insight-card h4 { color: var(--text); }
+  .insight-card p { color: var(--muted); }
+  .tag-alert { background: var(--red-bg); color: var(--red-soft); }
+  .tag-info { background: var(--blue-bg); color: var(--blue); }
+  .tag-success { background: var(--green-bg); color: var(--green); }
+
+  /* ---- FRED chat ---- */
+  #chat-trigger { background: var(--brand); box-shadow: 0 8px 24px -6px var(--ring); border-radius: 16px; }
+  #chat-trigger:hover { transform: translateY(-2px) scale(1.03); background: var(--brand-strong); }
+  #chat-window {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--sh-doc); overflow: hidden;
+  }
+  .chat-header { background: var(--surface-2); color: var(--text); border-bottom: 1px solid var(--border); }
+  .chat-messages { background: color-mix(in oklab, var(--surface) 60%, var(--bg)); }
+  .msg-bot { background: var(--surface); border-color: var(--border); color: var(--text); box-shadow: var(--sh-1); }
+  .msg-user { background: var(--brand); color: #fff; }
+  .chat-input-area { background: var(--surface); border-top-color: var(--border); }
+  .chat-input { background: var(--surface-2); border-color: var(--border); color: var(--text); border-radius: var(--r-sm); }
+  .chat-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); }
+  .chat-send { background: var(--brand); border-radius: var(--r-sm); }
+  .chat-send:hover { background: var(--brand-strong); }
+  .typing-indicator { background: var(--surface); border-color: var(--border); }
+
+  /* ---- Loading / error ---- */
+  #loading-overlay { background: color-mix(in oklab, #09090b 55%, transparent); backdrop-filter: blur(4px); }
+  .spinner { border-color: rgba(255,255,255,.18); border-top-color: var(--brand); }
+
+  /* ---- Theme toggle button ---- */
+  #btn-theme .sun { display: none; }
+  :root[data-theme="dark"] #btn-theme .sun,
+  #btn-theme .sun { }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+}
