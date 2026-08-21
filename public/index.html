@@ -67,25 +67,9 @@
         </div>
     </div>
 
-    <!-- Customer Search Modal -->
-    <div class="email-modal-overlay" id="customer-modal-overlay">
-        <div class="email-modal" style="width: 700px; max-width: 95vw; max-height: 90vh; display: flex; flex-direction: column;">
-            <h2 id="cs-title">🔍 Search Customers</h2>
-            <p class="subtitle" id="cs-subtitle">Look up a customer and view their recent jobs</p>
-
-            <!-- Search Input View -->
-            <div id="cs-search-view" style="flex:1;">
-                <input type="text" id="cs-input" placeholder="Type customer name or site address to search..." autocomplete="off">
-                <div id="cs-status" style="margin-top: 10px; font-size: 0.8rem; color: #666; min-height: 20px;"></div>
-                <div id="cs-results" style="margin-top: 10px; max-height: 500px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; display: none;"></div>
-            </div>
-
-            <div class="email-modal-actions" style="margin-top: auto; padding-top: 20px; display:flex; gap:10px; align-items:center;">
-                <button class="btn btn-outline" id="btn-cs-refresh" style="font-size:0.85em; padding:6px 14px;">🔄 Refresh from simPRO</button>
-                <button class="btn-cancel" id="btn-cs-close">Close</button>
-            </div>
-        </div>
-    </div>
+    <!-- Customer search now lives in the master rail (below). This empty shell
+         is kept so existing JS that toggles the overlay stays a harmless no-op. -->
+    <div class="email-modal-overlay" id="customer-modal-overlay" style="display:none"></div>
 
     <!-- Loading Overlay -->
     <div id="loading-overlay">
@@ -94,6 +78,24 @@
     </div>
 
     <!-- Automatic Email Send Mode Active -->
+
+    <div class="workspace">
+        <aside class="master-rail" id="master-rail">
+            <div class="rail-head">
+                <h2 id="cs-title" class="rail-title">Customers</h2>
+                <p class="subtitle" id="cs-subtitle">Search a customer, then open a job</p>
+                <div id="cs-search-view">
+                    <input type="text" id="cs-input" placeholder="Search customer or site…" autocomplete="off">
+                    <div id="cs-status"></div>
+                </div>
+            </div>
+            <div id="cs-results" style="display:none"></div>
+            <div class="rail-foot">
+                <button class="btn btn-outline" id="btn-cs-refresh">🔄 Refresh</button>
+                <button class="btn-cancel" id="btn-cs-close" style="display:none">Close</button>
+            </div>
+        </aside>
+        <main class="detail-pane">
 
     <div class="page-wrapper">
         <div id="error-banner"></div>
@@ -386,6 +388,9 @@
             </aside>
         </div><!-- .page-layout -->
     </div><!-- .page-wrapper -->
+
+        </main><!-- .detail-pane -->
+    </div><!-- .workspace -->
 
     <!-- Chatbot Widget UI -->
     <div id="chat-trigger">🤖</div>

@@ -1503,3 +1503,9 @@ function toggleOvIssue(btn) {
     const nowClamped = issue.classList.toggle('clamped');
     btn.textContent = nowClamped ? 'Show more' : 'Show less';
 }
+
+/* ── Master-detail: populate the customer rail on load ── */
+window.addEventListener('load', function () {
+    try { if (typeof fetchCustomers === 'function') fetchCustomers('', true); }
+    catch (e) { console.warn('[rail] init:', e); }
+});

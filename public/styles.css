@@ -1800,3 +1800,62 @@
   /* Agent sidebar slightly slimmer so the document gets more room */
   .agent-sidebar { width: 320px; }
 }
+
+/* ==========================================================================
+   FPOWS — MASTER–DETAIL LAYOUT (screen-only)
+   Persistent customer/job rail beside a scrollable job-detail pane. The old
+   search modal is gone; the paper call sheet gets full, roomy width.
+   ========================================================================== */
+@media screen {
+  body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+  .control-bar { position: static; flex-shrink: 0; }
+
+  .workspace { flex: 1; display: flex; min-height: 0; }
+
+  /* Master rail */
+  .master-rail {
+    width: 348px; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0;
+    background: color-mix(in oklab, var(--surface) 92%, var(--bg));
+    border-right: 1px solid var(--border);
+  }
+  .rail-head { flex-shrink: 0; padding: 16px 16px 14px; border-bottom: 1px solid var(--border); }
+  .rail-title { font-size: 15px; font-weight: 750; margin: 0; letter-spacing: -.01em; }
+  .rail-head .subtitle { font-size: 12px; color: var(--muted); margin: 3px 0 12px; }
+  #cs-search-view { display: block; }
+  #cs-input {
+    width: 100%; height: 40px; padding: 0 13px; font-size: 13.5px; font-family: inherit;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 10px; outline: none;
+  }
+  #cs-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); }
+  #cs-status { margin-top: 9px; font-size: 12px; color: var(--muted); min-height: 16px; }
+
+  #cs-results {
+    flex: 1; min-height: 0; overflow-y: auto; background: transparent;
+    border: 0 !important; border-radius: 0 !important; max-height: none !important; margin: 0 !important;
+  }
+  .rail-foot { flex-shrink: 0; display: flex; gap: 8px; align-items: center; padding: 12px 14px; border-top: 1px solid var(--border); }
+  .rail-foot .btn { height: 34px; font-size: 12.5px; }
+
+  /* Detail pane */
+  .detail-pane { flex: 1; min-width: 0; overflow-y: auto;
+    background: radial-gradient(1000px 340px at 50% -10%, color-mix(in oklab, var(--brand) 5%, transparent), transparent 70%), var(--bg); }
+  .detail-pane .page-wrapper { margin: 26px auto; max-width: 1160px; padding: 0 30px 90px; }
+
+  /* Roomy call sheet: the insights sidebar is superseded by the rail + FRED,
+     so the paper gets the full width. (Element kept in DOM, just hidden.) */
+  #agent-sidebar { display: none !important; }
+  .page-layout { display: block; }
+  #fpows-form { width: 100%; }
+}
+
+/* Print: reset the app-shell wrappers so only the paper prints */
+@media print {
+  body { height: auto !important; overflow: visible !important; display: block !important; }
+  .master-rail, .rail-foot, .rail-head { display: none !important; }
+  .workspace { display: block !important; }
+  .detail-pane { overflow: visible !important; background: none !important; }
+  .detail-pane .page-wrapper { margin: 0 !important; max-width: none !important; padding: 0 !important; }
+}
+
+/* Brand logo — slightly larger for legibility of the wordmark */
+@media screen { .control-bar .brand .brand-logo { height: 34px; max-width: 190px; } }
