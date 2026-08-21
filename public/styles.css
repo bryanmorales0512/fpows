@@ -1759,3 +1759,44 @@
   :root[data-theme="dark"] .control-bar .brand .brand-logo { filter: brightness(0) invert(1); opacity: .95; }
   :root[data-theme="light"] .control-bar .brand .brand-logo { filter: none; opacity: 1; }
 }
+
+/* ==========================================================================
+   FPOWS — COMFORT / READABILITY (screen-only)
+   Wider content wrappers, no data truncation, expand-collapse for long text.
+   ========================================================================== */
+@media screen {
+  /* Roomier content area — less compact */
+  .page-wrapper { max-width: 1460px; padding: 0 28px 120px; }
+  .page-layout { gap: 28px; }
+
+  /* Job Overview: more breathing room */
+  .job-overview { padding: 24px 28px; }
+  .jo-stats { gap: 14px; margin-top: 20px; }
+  .jo-stat { padding: 15px 17px; }
+  .jo-works { gap: 10px; }
+  .jo-work { padding: 14px 16px; gap: 14px; }
+  .jo-work-eq { font-size: 13.5px; }
+  .jo-work-issue { font-size: 13px; line-height: 1.55; color: var(--muted); margin-top: 4px; }
+
+  /* Never truncate the issue — clamp only until the user expands it */
+  .jo-work-issue.clamped {
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .jo-more {
+    margin-top: 7px; padding: 0; background: none; border: 0; cursor: pointer;
+    font: inherit; font-size: 12px; font-weight: 600; color: var(--brand);
+  }
+  .jo-more:hover { text-decoration: underline; }
+
+  /* Browse lists: let names WRAP instead of cutting them off with an ellipsis */
+  .job-name { white-space: normal; overflow: visible; text-overflow: clip; }
+  .jo-work-eq { white-space: normal; }
+  .cust-name { overflow-wrap: anywhere; }
+
+  /* Paper document: a touch more width + comfortable table cells */
+  #fpows-form { min-width: 0; }
+  .works-table td { line-height: 1.5; }
+
+  /* Agent sidebar slightly slimmer so the document gets more room */
+  .agent-sidebar { width: 320px; }
+}

@@ -285,13 +285,16 @@
                                 let bc = 'b-pending', label = 'Pending';
                                 if (s.includes('progress')) { bc = 'b-progress'; label = 'In Progress'; }
                                 else if (s.includes('complete')) { bc = 'b-done'; label = 'Completed'; }
-                                const issue = summarizeIssue(w.Issue || '') || (w.Issue || '—');
+                                const lines = (w.Issue || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+                                const fullIssue = lines.length ? lines.map(escHtml).join('<br>') : '—';
+                                const isLong = lines.length > 2 || (w.Issue || '').length > 170;
                                 return '<div class="jo-work">'
                                     + '<span class="job-badge ' + bc + '">' + label + '</span>'
                                     + '<div class="jo-work-body">'
                                     + '<div class="jo-work-top"><span class="jo-work-eq">' + escHtml(w.EquipmentType || 'Works') + '</span>'
                                     + (w.Job ? '<span class="jo-work-id">' + escHtml(w.Job) + '</span>' : '') + '</div>'
-                                    + '<div class="jo-work-issue">' + escHtml(issue) + '</div>'
+                                    + '<div class="jo-work-issue' + (isLong ? ' clamped' : '') + '">' + fullIssue + '</div>'
+                                    + (isLong ? '<button type="button" class="jo-more" onclick="toggleOvIssue(this)">Show more</button>' : '')
                                     + '</div></div>';
                             }).join('');
                         }
@@ -1492,3 +1495,11 @@
     });
     paintIcon();
 })();
+
+/* ── Job Overview: expand / collapse long issue text ── */
+function toggleOvIssue(btn) {
+    const issue = btn.previousElementSibling;
+    if (!issue) return;
+    const nowClamped = issue.classList.toggle('clamped');
+    btn.textContent = nowClamped ? 'Show more' : 'Show less';
+}
