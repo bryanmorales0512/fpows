@@ -53,8 +53,8 @@
 
             const style = styles[s] || 'background:#F3F4F6; color:#4B5563; border:1px solid #E5E7EB;';
             const icon = {
-                'COMPLETED': '✔ ', 'DONE': '✔ ', 'PENDING': '⏳ ',
-                'IN PROGRESS': '🏃 ', 'PROGRESS': '🏃 ', 'SCHEDULED': '📅 ', 'QUOTED': '📨 '
+                'COMPLETED': '', 'DONE': '', 'PENDING': '',
+                'IN PROGRESS': '', 'PROGRESS': '', 'SCHEDULED': '', 'QUOTED': ''
             }[s] || '';
 
             return `<span class="status-badge" style="padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.04em; display: inline-flex; align-items: center; white-space: nowrap; ${style}">${icon}${s}</span>`;
@@ -254,7 +254,7 @@
                     setText('jo-jobid', '#' + (data.JobID || '—'));
                     const deEnt = s => (s || '').replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&').replace(/\s+/g, ' ').trim();
                     const contact = [deEnt(data.SiteContact?.Name), deEnt(data.SiteContact?.Phone)].filter(Boolean).join('  ·  ');
-                    setText('jo-contact', contact ? ('👤 ' + contact) : '');
+                    { var _jc = $('jo-contact'); if (_jc) _jc.innerHTML = contact ? (LC.user + '<span>' + escHtml(contact) + '</span>') : ''; }
 
                     setText('jo-6mo', sixMonth ? (sixMonth + (sixYear ? ' ' + sixYear : '')) : '—');
                     setText('jo-12mo', twelveMonth ? (twelveMonth + (twelveYear ? ' ' + twelveYear : '')) : '—');
@@ -279,6 +279,8 @@
                     window._ovWorks = works;
                     renderOverviewWorks();
                     ov.style.display = 'block';
+                    document.body.classList.add('drawer-open');
+                    const bs = $('btn-summary'); if (bs) bs.style.display = '';
                 }
                 const je = $('job-empty'); if (je) je.style.display = 'none';
             } catch (e) { console.warn('[overview] render skipped:', e); }
@@ -314,7 +316,7 @@
                                     <div style="margin-bottom: 4px;"><strong>Client:</strong> ${log.clientEmail || log.to || '—'}</div>
                                     <div><strong>Manager:</strong> ${log.managerEmail || '—'}</div>
                                 </div>
-                                <button onclick="deleteHistoryItem('${log.timestamp}')" style="background:none; border:none; color:#e63946; cursor:pointer; font-size:16px; margin-left:10px;" title="Delete Record">🗑️</button>
+                                <button onclick="deleteHistoryItem('${log.timestamp}')" style="background:none; border:none; color:#e63946; cursor:pointer; font-size:16px; margin-left:10px;" title="Delete Record">${LC.trash}</button>
                             </td>
                         </tr>
                     `;
@@ -375,14 +377,14 @@
                     const chip = (txt, cls) => `<span class="chip ${cls || ''}">${txt}</span>`;
                     const renderItem = (c) => {
                         const tags = (c.priority && c.priorityTags && c.priorityTags.length)
-                            ? c.priorityTags.map(t => chip('🏷 ' + t, 'chip-tag')).join('') : '';
+                            ? c.priorityTags.map(t => chip(LC.tag + escHtml(t), 'chip-tag')).join('') : '';
                         const overdue = c.overdue ? chip(getOverdueText(c.latestActivity), 'chip-overdue') : '';
-                        const loc = chip('📍 ' + (c.postcode || 'N/A'), 'chip-loc');
+                        const loc = chip(LC.mapPin + (c.postcode || 'N/A'), 'chip-loc');
                         const typeLabel = c.type === 'Individual' ? 'Individual' : 'Company';
                         return `
                         <div class="cust-block">
-                            <button type="button" class="cust-row" onclick="loadCustomerJobs('${c.id}', this)">
-                                <span class="cust-chevron" aria-hidden="true">▸</span>
+                            <button type="button" class="cust-row" onclick="drillIntoCustomer('${c.id}', this)">
+                                <span class="cust-chevron" aria-hidden="true">${LC.chevronRight}</span>
                                 <span class="cust-body">
                                     <span class="cust-name">${c.name}</span>
                                     <span class="cust-sub"><span class="cust-id">ID ${c.id}</span>${loc}${overdue}${tags}</span>
@@ -396,7 +398,7 @@
                     if (majors.length > 0) {
                         finalHtml += `
                             <div class="cust-section">
-                                <div class="cust-section-head cust-section-major"><span>⭐ Major customers</span><span class="cust-count">${majors.length}</span></div>
+                                <div class="cust-section-head cust-section-major"><span>${LC.star} Major customers</span><span class="cust-count">${majors.length}</span></div>
                                 ${majors.map(renderItem).join('')}
                             </div>`;
                     }
@@ -517,7 +519,7 @@
             $('loading-overlay').style.display = 'flex';
             $('loading-text').textContent = 'Fetching Job #' + jobId + ' from simPRO...';
             $('status-pill').className = 'status-pill pill-loading';
-            $('status-pill').textContent = '⏳ Loading...';
+            $('status-pill').textContent = 'Loading...';
 
             try {
                 const res = await fetch('/api/job/' + jobId);
@@ -526,8 +528,8 @@
 
                 renderForm(data);
                 $('status-pill').className = 'status-pill pill-done';
-                $('status-pill').textContent = '✅ Job #' + jobId + ' loaded';
-                $('btn-fetch').textContent = '🔄 Reload';
+                $('status-pill').textContent = 'Job #' + jobId + ' loaded';
+                
                 $('btn-publish').style.display = '';
                 $('btn-print').style.display = '';
 
@@ -542,7 +544,7 @@
                 console.error("Fetch error:", err);
                 showError('Failed to load Job #' + jobId + ': ' + err.message);
                 $('status-pill').className = 'status-pill pill-error';
-                $('status-pill').textContent = '❌ Error loading job';
+                $('status-pill').textContent = 'Error loading job';
             } finally {
                 $('loading-overlay').style.display = 'none';
             }
@@ -579,7 +581,7 @@
             if (!jobId || jobId === '—') { showError('No job loaded to save.'); return; }
 
             $('status-pill').className = 'status-pill pill-loading';
-            $('status-pill').textContent = '📤 Saving & Sending...';
+            $('status-pill').textContent = 'Saving & Sending...';
             $('btn-publish').disabled = true;
 
             try {
@@ -791,7 +793,7 @@
                 const result = await res.json();
                 if (result.success) {
                     $('status-pill').className = 'status-pill pill-done';
-                    $('status-pill').textContent = `✅ Job #${jobId} Saved & Sent!`;
+                    $('status-pill').textContent = `Job #${jobId} Saved & Sent!`;
                     speak(`Done! Job #${jobId} sent to ${managerOnly ? 'the manager' : `${actualClient} and the manager`}.`, "What's next?", "done");
 
                     // Add to history list UI immediately
@@ -802,7 +804,7 @@
             } catch (err) {
                 console.error("DEBUG: Send Failure Details:", err);
                 $('status-pill').className = 'status-pill pill-error';
-                $('status-pill').textContent = `❌ Sending Error`;
+                $('status-pill').textContent = `Sending Error`;
 
                 if (err.name === 'TypeError' && err.message.toLowerCase().includes('fetch')) {
                     showError("Connection Failed: Ensure the server (yarn dev) is running and you have a stable network.");
@@ -902,8 +904,8 @@
                     renderForm(data);
                     $('job-id-input').value = jobId;
                     $('status-pill').className = 'status-pill pill-done';
-                    $('status-pill').textContent = `✅ Job #${jobId} loaded`;
-                    $('btn-fetch').textContent = '🔄 Reload';
+                    $('status-pill').textContent = `Job #${jobId} loaded`;
+                    
                     $('btn-publish').style.display = '';
                     $('btn-print').style.display = '';
 
@@ -945,7 +947,7 @@
                     summary += `<br><br>Everything's in the form — want me to check anything, or are you ready to send?`;
                     return summary;
                 } catch (err) {
-                    return `❌ Failed to fetch Job #${jobId}: ${err.message}. Please verify the Job ID and try again.`;
+                    return `Failed to fetch Job #${jobId}: ${err.message}. Please verify the Job ID and try again.`;
                 }
             }
 
@@ -1446,7 +1448,7 @@
                 return;
             }
             bar.style.display = 'flex';
-            bar.innerHTML = '<span class="presence-label">👁 Viewing:</span>' +
+            bar.innerHTML = '<span class="presence-label">' + LC.eye + ' Viewing:</span>' +
                 viewers.map(v => `<div class="presence-avatar" style="background:${v.color}">${getInitials(v.name)}<span class="pulse-dot"></span><span class="tooltip">${v.name}</span></div>`).join('');
         }
 
@@ -1516,7 +1518,16 @@ var LC = {
   chevronDown: '<svg class="lc" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>',
   chevronUp:   '<svg class="lc" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>',
   copy:        '<svg class="lc" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>',
-  check:       '<svg class="lc" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>'
+  check:       '<svg class="lc" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>',
+  chevronRight: '<svg class="lc" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
+  chevronLeft:  '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
+  mapPin:      '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="M20 10c0 4.4-8 12-8 12s-8-7.6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+  calendar:    '<svg class="lc lc-xs" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>',
+  tag:         '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
+  star:        '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>',
+  user:        '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  eye:         '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  trash:       '<svg class="lc lc-xs" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>'
 };
 
 /* ── Job Overview: sort + status filter for outstanding works ── */
@@ -1596,3 +1607,45 @@ function copyJobId() {
     navigator.clipboard.writeText(txt).then(function () { fpowsToast('Copied job ' + txt); }).catch(function () { fpowsToast('Job ' + txt); });
   } else { fpowsToast('Job ' + txt); }
 }
+
+/* ── Rail drill-down (customers → jobs) with breadcrumb ── */
+function jobBadgeClass(stage) {
+  var sl = (stage || '').toLowerCase();
+  if (sl.indexOf('progress') >= 0) return 'b-progress';
+  if (sl.indexOf('completed') >= 0 || sl.indexOf('invoiced') >= 0) return 'b-done';
+  return 'b-pending';
+}
+function renderJobRow(j) {
+  var bc = jobBadgeClass(j.stage);
+  return '<button type="button" class="job-row" onclick="selectJobFromSearch(\'' + j.id + '\')">'
+    + '<span class="job-badge ' + bc + '">' + escHtml(j.stage || '') + '</span>'
+    + '<span class="job-body"><span class="job-line1"><span class="job-name">' + escHtml(j.name || ('Job #' + j.id)) + '</span><span class="job-id">#' + j.id + '</span></span>'
+    + '<span class="job-line2">' + LC.mapPin + ' ' + escHtml(j.site || '') + ' &nbsp;·&nbsp; ' + LC.calendar + ' ' + escHtml(j.date || '') + '</span></span>'
+    + '<span class="job-go" aria-hidden="true">' + LC.chevronRight + '</span></button>';
+}
+function drillIntoCustomer(id, rowEl) {
+  var box = document.getElementById('cs-results'); if (!box) return;
+  window._railBackHtml = box.innerHTML;
+  var nameEl = rowEl && rowEl.querySelector ? rowEl.querySelector('.cust-name') : null;
+  var name = nameEl ? nameEl.textContent : 'Customer';
+  box.innerHTML = '<div class="rail-crumb"><button type="button" class="crumb-back" onclick="railBack()">' + LC.chevronLeft + '<span>Customers</span></button></div>'
+    + '<div class="rail-cust-hdr">' + escHtml(name) + '</div>'
+    + '<div class="jobs-panel"><div class="jobs-status">Loading jobs…</div></div>';
+  var panel = box.querySelector('.jobs-panel');
+  fetch('/api/customers/' + id + '/jobs').then(function (r) { return r.json(); }).then(function (data) {
+    if (data.jobs && data.jobs.length) { panel.innerHTML = data.jobs.map(renderJobRow).join(''); }
+    else panel.innerHTML = '<div class="jobs-status">No active or pending jobs found.</div>';
+  }).catch(function () { panel.innerHTML = '<div class="jobs-status jobs-error">Error loading jobs.</div>'; });
+}
+function railBack() {
+  var box = document.getElementById('cs-results');
+  if (box && window._railBackHtml != null) { box.innerHTML = window._railBackHtml; }
+}
+
+/* ── Overview drawer (open/close) ── */
+window.addEventListener('load', function () {
+  var open = document.getElementById('btn-summary');
+  var close = document.getElementById('jo-close');
+  if (open) open.addEventListener('click', function () { document.body.classList.toggle('drawer-open'); });
+  if (close) close.addEventListener('click', function () { document.body.classList.remove('drawer-open'); });
+});
