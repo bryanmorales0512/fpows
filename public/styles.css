@@ -2128,3 +2128,44 @@
   .job-badge { text-transform: none; letter-spacing: .002em; font-weight: 700; }
   .chip { text-transform: none; letter-spacing: 0; }
 }
+
+/* ==========================================================================
+   FPOWS — STATUS & TAGS: dot + text (not candy-colored pills). Screen only.
+   Semantic colour becomes a small dot + a left row stripe; tags become quiet
+   outline chips with only a hint of colour. (Printable form badges untouched.)
+   ========================================================================== */
+@media screen {
+  /* Status = coloured dot + plain text, no filled pill */
+  .job-badge {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .job-badge::before { width: 7px; height: 7px; }
+  .job-badge.b-pending::before  { background: var(--amber); }
+  .job-badge.b-progress::before { background: var(--blue); }
+  .job-badge.b-done::before     { background: var(--green); }
+
+  /* Left status stripe on the rail job rows (at-a-glance, quiet) */
+  .job-row { border-left: 3px solid var(--border); }
+  .job-row.sev-pending  { border-left-color: var(--amber); }
+  .job-row.sev-progress { border-left-color: var(--blue); }
+  .job-row.sev-done     { border-left-color: var(--green); }
+
+  /* Tags = quiet outline chips; colour only as a small icon hint */
+  .chip, .chip-tag, .chip-loc {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .chip-tag .lc { color: var(--amber); opacity: .9; }
+  .chip-loc .lc { color: var(--muted); }
+  .chip-overdue { background: var(--red-bg) !important; color: var(--red-soft) !important; border-color: transparent !important; }
+}

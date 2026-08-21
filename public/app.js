@@ -1617,7 +1617,8 @@ function jobBadgeClass(stage) {
 }
 function renderJobRow(j) {
   var bc = jobBadgeClass(j.stage);
-  return '<button type="button" class="job-row" onclick="selectJobFromSearch(\'' + j.id + '\')">'
+  var sev = bc === 'b-progress' ? 'sev-progress' : (bc === 'b-done' ? 'sev-done' : 'sev-pending');
+  return '<button type="button" class="job-row ' + sev + '" onclick="selectJobFromSearch(\'' + j.id + '\')">'
     + '<span class="job-badge ' + bc + '">' + escHtml(j.stage || '') + '</span>'
     + '<span class="job-body"><span class="job-line1"><span class="job-name">' + escHtml(j.name || ('Job #' + j.id)) + '</span><span class="job-id">#' + j.id + '</span></span>'
     + '<span class="job-line2">' + LC.mapPin + ' ' + escHtml(j.site || '') + ' &nbsp;·&nbsp; ' + LC.calendar + ' ' + escHtml(j.date || '') + '</span></span>'
