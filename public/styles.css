@@ -1518,3 +1518,69 @@
     * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
   }
 }
+
+/* ==========================================================================
+   FPOWS — POLISH v2 (screen-only). Higher-craft refinement layer.
+   ========================================================================== */
+@media screen {
+  /* refined, more premium neutrals + softer depth */
+  :root, :root[data-theme="light"] {
+    --bg:#f4f4f5; --surface:#ffffff; --surface-2:#f6f6f7;
+    --border:#e8e8ea; --border-strong:#d9d9dd; --text:#1b1b1f; --muted:#6c6c76; --faint:#9a9aa4;
+    --sh-1: 0 1px 2px rgba(20,20,24,.06);
+    --sh-2: 0 6px 20px -6px rgba(20,20,24,.14), 0 2px 6px rgba(20,20,24,.06);
+    --sh-doc: 0 30px 70px -28px rgba(20,20,24,.30), 0 8px 20px -8px rgba(20,20,24,.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0a0a0b; --surface:#151518; --surface-2:#1c1c20; --border:#292930; --border-strong:#3a3a42; }
+  }
+  :root[data-theme="dark"] { --bg:#0a0a0b; --surface:#151518; --surface-2:#1c1c20; --border:#292930; --border-strong:#3a3a42; }
+
+  html { scroll-behavior: smooth; }
+  body { line-height: 1.5; letter-spacing: -0.005em; }
+
+  /* App bar — a touch taller, calmer, with brand divider */
+  .control-bar { padding: 0 22px; min-height: 62px; gap: 18px; }
+  .control-bar .brand { padding-right: 18px; margin-right: 2px; border-right: 1px solid var(--border); }
+  .control-bar .brand .tag { margin-left: 4px; }
+  .search-row > div { gap: 10px !important; }
+
+  /* Buttons — quieter radius, crisper */
+  .btn { border-radius: 8px; font-weight: 600; height: 38px; padding: 0 15px; }
+  .btn:not(.btn-outline) { box-shadow: 0 1px 2px rgba(204,34,34,.28), inset 0 1px 0 rgba(255,255,255,.12); }
+  .btn.btn-icon { width: 38px; }
+
+  /* Workspace — more air; document reads as a centered sheet */
+  .page-wrapper { max-width: 1280px; margin: 30px auto; padding: 0 22px 120px; }
+  .page-layout { gap: 26px; }
+  #fpows-form { border-radius: 16px; }
+  .form-header { padding: 26px 34px; }
+  .form-title { padding: 22px 0; }
+  .meta-cell { padding: 13px 18px; }
+  .meta-cell .lbl { font-size: 0.6rem; letter-spacing: .1em; margin-bottom: 5px; }
+  .meta-cell .val { font-size: 0.92rem; }
+
+  /* Works table — refined header + gentle row interaction (screen) */
+  .works-table th { background: #26262b; letter-spacing: .06em; padding: 11px 10px; }
+  .works-table td { padding: 11px 12px; }
+  .works-table tbody tr { transition: background .12s; }
+  .works-table tbody tr:hover td { background: color-mix(in oklab, var(--brand) 4%, #ffffff); }
+  .rec-title { border-top: 2px solid #ececee; border-bottom: 1px solid #ececee; color: #26262b; letter-spacing: .08em; }
+
+  /* Status pill + badges — softer, dot-led */
+  .status-pill { padding: 7px 14px; box-shadow: var(--sh-1); }
+
+  /* Sidebar / chat — calmer surfaces, rounder */
+  .agent-sidebar { border-radius: 16px; padding: 24px; }
+  .agent-avatar { border-radius: 12px; }
+  #chat-window { border-radius: 16px; }
+  #chat-trigger { border-radius: 18px; }
+
+  /* Dialogs — a bit more presence */
+  .email-modal { border-radius: 16px; padding: 28px; box-shadow: var(--sh-doc); }
+
+  /* Focus visibility everywhere */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [contenteditable]:focus-visible {
+    outline: none;
+  }
+}
