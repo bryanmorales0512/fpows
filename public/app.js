@@ -1552,7 +1552,8 @@ function renderOverviewWorks() {
     var lines = (w.Issue || '').split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
     var fullIssue = lines.length ? lines.map(escHtml).join('<br>') : '—';
     var isLong = lines.length > 2 || (w.Issue || '').length > 170;
-    return '<div class="jo-work">'
+    var sev = bc === 'b-progress' ? 'sev-progress' : (bc === 'b-done' ? 'sev-done' : 'sev-pending');
+    return '<div class="jo-work ' + sev + '">'
       + '<span class="job-badge ' + bc + '">' + label + '</span>'
       + '<div class="jo-work-body">'
       + '<div class="jo-work-top"><span class="jo-work-eq">' + escHtml(w.EquipmentType || 'Works') + '</span>'

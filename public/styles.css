@@ -2027,3 +2027,30 @@
     #job-overview .jo-stats { grid-template-columns: repeat(4, 1fr); }
   }
 }
+
+/* ==========================================================================
+   FPOWS — DISTINCTIVE / ANTI-GENERIC PASS (artifact-design + impeccable spirit)
+   Grounded in the subject: a fire-protection compliance/inspection dossier,
+   not generic SaaS. Restrained, technical, considered — respects the soft theme.
+   ========================================================================== */
+@media screen {
+  :root { --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace; }
+
+  /* Reference codes read like an inspection report, not body text */
+  .jo-jobid, .jo-work-id, .job-id, .cust-id, #jo-afss, .p-foot .tnum { font-family: var(--mono); letter-spacing: -.01em; }
+  .jo-jobtag { font-family: var(--mono); font-weight: 700; }
+
+  /* Findings carry a severity stripe — state encoded as form, not just a badge */
+  .jo-work { border-left: 3px solid var(--border); }
+  .jo-work.sev-pending  { border-left-color: var(--amber); }
+  .jo-work.sev-progress { border-left-color: var(--blue); }
+  .jo-work.sev-done     { border-left-color: var(--green); }
+
+  /* Micro-labels: tighter, more technical (not the default soft SaaS look) */
+  .jo-stat .lab, .jo-works-head > span:first-child, .sec-head, .rail-controls > label[for="rail-sort"] {
+    letter-spacing: .11em;
+  }
+  /* Considered radius scale — squared enough to feel precise, not pillowy */
+  .jo-stat, .job-badge, .chip { border-radius: 8px; }
+  .job-badge, .chip { border-radius: 999px; } /* keep pills as pills */
+}
