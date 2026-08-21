@@ -252,7 +252,8 @@
                     const siteLine = [data.Site, data.SiteArea].filter(x => x && x !== 'N/A').join('  ·  ');
                     setText('jo-site', siteLine || '—');
                     setText('jo-jobid', '#' + (data.JobID || '—'));
-                    const contact = [data.SiteContact?.Name, data.SiteContact?.Phone].filter(Boolean).join('  ·  ');
+                    const deEnt = s => (s || '').replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&').replace(/\s+/g, ' ').trim();
+                    const contact = [deEnt(data.SiteContact?.Name), deEnt(data.SiteContact?.Phone)].filter(Boolean).join('  ·  ');
                     setText('jo-contact', contact ? ('👤 ' + contact) : '');
 
                     setText('jo-6mo', sixMonth ? (sixMonth + (sixYear ? ' ' + sixYear : '')) : '—');
@@ -275,30 +276,8 @@
                     setText('jo-count', String(works.length));
                     setText('jo-count-sub', works.length ? (pend + ' pending · ' + prog + ' in progress') : 'None outstanding');
 
-                    const jw = $('jo-works');
-                    if (jw) {
-                        if (works.length === 0) {
-                            jw.innerHTML = '<div class="jo-empty">✔ No outstanding works for this site.</div>';
-                        } else {
-                            jw.innerHTML = works.map(w => {
-                                const s = (w.DisplayStatus || w.Status || 'PENDING').toLowerCase();
-                                let bc = 'b-pending', label = 'Pending';
-                                if (s.includes('progress')) { bc = 'b-progress'; label = 'In Progress'; }
-                                else if (s.includes('complete')) { bc = 'b-done'; label = 'Completed'; }
-                                const lines = (w.Issue || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-                                const fullIssue = lines.length ? lines.map(escHtml).join('<br>') : '—';
-                                const isLong = lines.length > 2 || (w.Issue || '').length > 170;
-                                return '<div class="jo-work">'
-                                    + '<span class="job-badge ' + bc + '">' + label + '</span>'
-                                    + '<div class="jo-work-body">'
-                                    + '<div class="jo-work-top"><span class="jo-work-eq">' + escHtml(w.EquipmentType || 'Works') + '</span>'
-                                    + (w.Job ? '<span class="jo-work-id">' + escHtml(w.Job) + '</span>' : '') + '</div>'
-                                    + '<div class="jo-work-issue' + (isLong ? ' clamped' : '') + '">' + fullIssue + '</div>'
-                                    + (isLong ? '<button type="button" class="jo-more" onclick="toggleOvIssue(this)">Show more</button>' : '')
-                                    + '</div></div>';
-                            }).join('');
-                        }
-                    }
+                    window._ovWorks = works;
+                    renderOverviewWorks();
                     ov.style.display = 'block';
                 }
                 const je = $('job-empty'); if (je) je.style.display = 'none';
@@ -1531,3 +1510,88 @@ window.addEventListener('load', function () {
     if (sel) sel.addEventListener('change', function () { railSort = sel.value; reRun(); });
     if (ov) ov.addEventListener('change', function () { railOverdueOnly = ov.checked; reRun(); });
 });
+
+/* ── Lucide inline icons (no external dependency) ── */
+var LC = {
+  chevronDown: '<svg class="lc" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>',
+  chevronUp:   '<svg class="lc" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>',
+  copy:        '<svg class="lc" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>',
+  check:       '<svg class="lc" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>'
+};
+
+/* ── Job Overview: sort + status filter for outstanding works ── */
+window._ovWorks = window._ovWorks || [];
+window._ovSort = 'status';
+window._ovFilter = 'all';
+function renderOverviewWorks() {
+  var jw = document.getElementById('jo-works'); if (!jw) return;
+  var all = window._ovWorks || [];
+  var sort = window._ovSort || 'status';
+  var filter = window._ovFilter || 'all';
+  var statusOf = function (w) { return (w.DisplayStatus || w.Status || 'PENDING').toLowerCase(); };
+  var parseD = function (d) { var m = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/.exec(d || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : 0; };
+  var rank = function (w) { var s = statusOf(w); if (s.indexOf('progress') >= 0) return 0; if (s.indexOf('complete') >= 0) return 2; return 1; };
+  if (all.length === 0) { jw.innerHTML = '<div class="jo-empty">' + LC.check + ' No outstanding works for this site.</div>'; return; }
+  var list = all.filter(function (w) {
+    var s = statusOf(w);
+    if (filter === 'pending') return s.indexOf('progress') < 0 && s.indexOf('complete') < 0;
+    if (filter === 'progress') return s.indexOf('progress') >= 0;
+    return true;
+  });
+  list.sort(function (a, b) {
+    if (sort === 'date') return parseD(b.Date) - parseD(a.Date);
+    if (sort === 'equipment') return (a.EquipmentType || '').localeCompare(b.EquipmentType || '');
+    return rank(a) - rank(b) || parseD(b.Date) - parseD(a.Date);
+  });
+  if (list.length === 0) { jw.innerHTML = '<div class="jo-empty jo-empty-muted">No works match this filter.</div>'; return; }
+  jw.innerHTML = list.map(function (w) {
+    var s = statusOf(w);
+    var bc = 'b-pending', label = 'Pending';
+    if (s.indexOf('progress') >= 0) { bc = 'b-progress'; label = 'In Progress'; }
+    else if (s.indexOf('complete') >= 0) { bc = 'b-done'; label = 'Completed'; }
+    var lines = (w.Issue || '').split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+    var fullIssue = lines.length ? lines.map(escHtml).join('<br>') : '—';
+    var isLong = lines.length > 2 || (w.Issue || '').length > 170;
+    return '<div class="jo-work">'
+      + '<span class="job-badge ' + bc + '">' + label + '</span>'
+      + '<div class="jo-work-body">'
+      + '<div class="jo-work-top"><span class="jo-work-eq">' + escHtml(w.EquipmentType || 'Works') + '</span>'
+      + (w.Job ? '<span class="jo-work-id">' + escHtml(w.Job) + '</span>' : '') + '</div>'
+      + '<div class="jo-work-issue' + (isLong ? ' clamped' : '') + '">' + fullIssue + '</div>'
+      + (isLong ? '<button type="button" class="jo-more" onclick="toggleOvIssue(this)">' + LC.chevronDown + '<span>Show more</span></button>' : '')
+      + '</div></div>';
+  }).join('');
+}
+
+window.addEventListener('load', function () {
+  var sortSel = document.getElementById('ov-sort');
+  if (sortSel) sortSel.addEventListener('change', function () { window._ovSort = sortSel.value; renderOverviewWorks(); });
+  var fil = document.getElementById('ov-filter');
+  if (fil) fil.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button[data-f]') : null; if (!b) return;
+    fil.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true');
+    window._ovFilter = b.getAttribute('data-f'); renderOverviewWorks();
+  });
+  var copyBtn = document.getElementById('jo-copy');
+  if (copyBtn) copyBtn.addEventListener('click', copyJobId);
+});
+
+/* ── Toast notifications ── */
+function fpowsToast(msg) {
+  var wrap = document.getElementById('toast-wrap'); if (!wrap) return;
+  var t = document.createElement('div'); t.className = 'toast'; t.innerHTML = LC.check + '<span>' + msg + '</span>';
+  wrap.appendChild(t);
+  requestAnimationFrame(function () { t.classList.add('show'); });
+  setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 260); }, 2200);
+}
+
+/* ── Copy job number ── */
+function copyJobId() {
+  var el = document.getElementById('jo-jobid');
+  var txt = (el ? el.textContent : '').replace('#', '').trim();
+  if (!txt || txt === '—') return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function () { fpowsToast('Copied job ' + txt); }).catch(function () { fpowsToast('Job ' + txt); });
+  } else { fpowsToast('Job ' + txt); }
+}

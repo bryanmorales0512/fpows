@@ -1955,3 +1955,75 @@
   .control-bar .brand .brand-logo { filter: none !important; opacity: 1 !important; }
   #btn-theme { display: none !important; }
 }
+
+/* ==========================================================================
+   FPOWS — ICONS (Lucide) + WORKS SORT/FILTER + COPY + TOAST + SIDE-BY-SIDE
+   ========================================================================== */
+@media screen {
+  /* Lucide inline icons */
+  .lc { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2;
+        stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .btn .lc { width: 16px; height: 16px; }
+  .btn { gap: 8px; }
+
+  /* Overview → sticky sidebar BESIDE the paper (paper is the main focus) */
+  .detail-pane .page-wrapper { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; max-width: 1560px; }
+  .detail-pane #error-banner { flex-basis: 100%; }
+  .detail-pane .page-layout { order: 1; flex: 1 1 620px; min-width: 0; }
+  .detail-pane #job-overview {
+    order: 2; flex: 0 0 384px; width: 384px; margin-bottom: 0;
+    position: sticky; top: 18px; max-height: calc(100vh - 120px); overflow-y: auto;
+  }
+  #job-overview .jo-stats { grid-template-columns: 1fr 1fr; }
+  #job-overview .jo-stat .val { font-size: 18px; }
+
+  /* Job tag + copy */
+  .jo-jobwrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .jo-copy { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--border);
+             background: var(--surface); color: var(--muted); border-radius: 8px; cursor: pointer; transition: color .12s, border-color .12s; }
+  .jo-copy:hover { color: var(--brand); border-color: var(--brand); }
+  .jo-copy .lc { width: 15px; height: 15px; }
+
+  /* Works toolbar */
+  .jo-works-head { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+                   flex-wrap: wrap; text-transform: none; letter-spacing: 0; font-weight: 400; }
+  .jo-works-head > span:first-child { font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+                   text-transform: uppercase; color: var(--muted); }
+  .jo-works-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ov-filter { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 2px; gap: 2px; }
+  .ov-filter button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 11.5px;
+                      font-weight: 600; padding: 4px 9px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+  .ov-filter button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: var(--sh-1); }
+  #ov-sort { height: 30px; padding: 0 9px; font: inherit; font-size: 11.5px; background: var(--surface);
+             border: 1px solid var(--border); color: var(--text); border-radius: 8px; cursor: pointer; }
+  #ov-sort:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); }
+
+  .jo-more { display: inline-flex; align-items: center; gap: 5px; }
+  .jo-more .lc { width: 14px; height: 14px; }
+  .jo-empty-muted { color: var(--muted) !important; background: var(--surface-2) !important; }
+
+  /* Toast */
+  #toast-wrap { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 200;
+                display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; }
+  .toast { display: inline-flex; align-items: center; gap: 8px; background: var(--text); color: var(--surface);
+           font-size: 13px; font-weight: 600; padding: 10px 15px; border-radius: 10px; box-shadow: var(--sh-2);
+           opacity: 0; transform: translateY(8px); transition: opacity .22s, transform .22s; }
+  .toast.show { opacity: 1; transform: none; }
+  .toast .lc { width: 15px; height: 15px; color: var(--green); }
+
+  /* FRED icon buttons */
+  .chat-header h3 .lc { width: 18px; height: 18px; }
+  .chat-close { display: grid; place-items: center; width: 28px; height: 28px; border: 0; background: transparent;
+                color: var(--muted); cursor: pointer; border-radius: 6px; }
+  .chat-close:hover { background: var(--surface-2); color: var(--text); }
+  .chat-close .lc { width: 18px; height: 18px; }
+  #chat-trigger .lc { width: 26px; height: 26px; color: #fff; }
+  .chat-send .lc { width: 18px; height: 18px; }
+
+  /* Stack the overview above the paper on narrower screens */
+  @media (max-width: 1180px) {
+    .detail-pane #job-overview { order: 0; flex-basis: 100%; width: 100%; position: static; max-height: none; overflow: visible; }
+    .detail-pane .page-layout { order: 1; }
+    #job-overview .jo-stats { grid-template-columns: repeat(4, 1fr); }
+  }
+}
