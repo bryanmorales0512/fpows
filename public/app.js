@@ -309,7 +309,7 @@
         });
 
         async function fetchCustomers(q, forceRefresh) {
-            $('cs-status').innerHTML = q ? 'Searching...' : 'Fetching latest from simPRO&hellip;';
+            $('cs-status').innerHTML = q ? 'Searching…' : 'Fetching latest from simPRO&hellip;';
             try {
                 let url = '/api/customers/search?q=' + encodeURIComponent(q);
                 if (forceRefresh) url += '&force=1';
@@ -317,71 +317,48 @@
                 const data = await res.json();
                 const resultsBox = $('cs-results');
                 const updatedAt = data.cacheTime ? new Date(data.cacheTime).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '';
-                const freshTag = updatedAt ? ` &nbsp;·&nbsp; <span style="color:#388e3c;font-weight:600;">&#x2714; Live from simPRO · ${updatedAt}</span>` : '';
+                const freshTag = updatedAt ? ` &nbsp;·&nbsp; <span class="cs-live">&#x2714; Live · ${updatedAt}</span>` : '';
                 if (data.results && data.results.length > 0) {
                     resultsBox.style.display = 'block';
-                    $('cs-status').innerHTML = q ? `Found ${data.results.length} result(s)${freshTag}` : `Showing ${data.results.length} recent customers. Type to search...${freshTag}`;
+                    $('cs-status').innerHTML = q ? `Found ${data.results.length} result(s)${freshTag}` : `${data.results.length} recent customers · type to search${freshTag}`;
                     const majors = data.results.filter(c => c.priority);
                     const regulars = data.results.filter(c => !c.priority);
 
+                    const chip = (txt, cls) => `<span class="chip ${cls || ''}">${txt}</span>`;
                     const renderItem = (c) => {
-                        let tagsHtml = '';
-                        if (c.priority && c.priorityTags && c.priorityTags.length > 0) {
-                            tagsHtml = `
-                                <span style="display:inline-block; font-size: 0.7em; color: #666; border: 1px solid #ddd; background: #fafafa; padding: 2px 6px; border-radius: 4px; vertical-align: middle; white-space: nowrap;">
-                                    🏷️ ${c.priorityTags.join(', ')}
-                                </span>
-                            `;
-                        }
-
-                        let overdueHtml = '';
-                        if (c.overdue) {
-                            overdueHtml = `<span style="display:inline-block; font-size:0.65em; font-weight:bold; color:white; background:#d32f2f; padding:2px 8px; border-radius:10px; white-space: nowrap; vertical-align: middle;">${getOverdueText(c.latestActivity)}</span>`;
-                        }
-
-                        let postcodeHtml = `<span style="display:inline-block; font-size:0.8em; color:#555; background:#e0e0e0; padding:2px 6px; border-radius:3px; white-space: nowrap; vertical-align: middle;">📍 ${c.postcode || 'N/A'}</span>`;
-
+                        const tags = (c.priority && c.priorityTags && c.priorityTags.length)
+                            ? c.priorityTags.map(t => chip('🏷 ' + t, 'chip-tag')).join('') : '';
+                        const overdue = c.overdue ? chip(getOverdueText(c.latestActivity), 'chip-overdue') : '';
+                        const loc = chip('📍 ' + (c.postcode || 'N/A'), 'chip-loc');
+                        const typeLabel = c.type === 'Individual' ? 'Individual' : 'Company';
                         return `
-                        <div class="customer-result-container">
-                            <div class="customer-result-item" onclick="loadCustomerJobs('${c.id}', this)" style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #eee;">
-                                <div class="customer-info-main" style="display:flex; align-items:center; flex-wrap:wrap; gap:8px; flex:1; min-width:0;">
-                                    <span class="customer-expander" style="display:inline-block; width:15px; color:#666; flex-shrink:0;">▸</span>
-                                    <span class="customer-name" style="margin:0;">${c.name}</span>
-                                    <span style="font-size:0.8em;color:#999;font-weight:normal; white-space:nowrap;">(ID: ${c.id})</span>
-                                    ${postcodeHtml}
-                                    ${overdueHtml}
-                                    ${tagsHtml}
-                                </div>
-                                <span class="customer-type" style="flex-shrink:0; margin-left:12px;">${c.type === 'Individual' ? 'Individual Customer' : c.type}</span>
-                            </div>
-                        </div>
-                        `;
+                        <div class="cust-block">
+                            <button type="button" class="cust-row" onclick="loadCustomerJobs('${c.id}', this)">
+                                <span class="cust-chevron" aria-hidden="true">▸</span>
+                                <span class="cust-body">
+                                    <span class="cust-name">${c.name}</span>
+                                    <span class="cust-sub"><span class="cust-id">ID ${c.id}</span>${loc}${overdue}${tags}</span>
+                                </span>
+                                <span class="cust-type">${typeLabel}</span>
+                            </button>
+                        </div>`;
                     };
 
                     let finalHtml = '';
-                    
                     if (majors.length > 0) {
                         finalHtml += `
-                            <details open style="margin-bottom: 15px; border: 1px solid var(--accent); border-radius: 6px; overflow: hidden;">
-                                <summary style="background: var(--accent); color: white; padding: 10px; cursor: pointer; font-weight: bold; outline: none; list-style-type: none;">
-                                    ⭐ Major Customers (${majors.length})
-                                </summary>
-                                <div style="background: #fffafb; padding: 0;">
-                                    ${majors.map(renderItem).join('')}
-                                </div>
-                            </details>
-                        `;
+                            <div class="cust-section">
+                                <div class="cust-section-head cust-section-major"><span>⭐ Major customers</span><span class="cust-count">${majors.length}</span></div>
+                                ${majors.map(renderItem).join('')}
+                            </div>`;
                     }
-                    
                     if (regulars.length > 0) {
                         finalHtml += `
-                            <div style="margin-top: 10px;">
-                                <div style="padding: 5px 10px; font-weight: bold; font-size: 0.85em; color: #666; background: #f5f5f5; border-bottom: 1px solid #eee; text-transform: uppercase;">Regular Clients</div>
+                            <div class="cust-section">
+                                <div class="cust-section-head"><span>Regular clients</span><span class="cust-count">${regulars.length}</span></div>
                                 ${regulars.map(renderItem).join('')}
-                            </div>
-                        `;
+                            </div>`;
                     }
-
                     resultsBox.innerHTML = finalHtml;
                 } else {
                     resultsBox.style.display = 'none';
@@ -398,7 +375,7 @@
             const q = e.target.value.trim();
             if (q.length > 0 && q.length < 2) {
                 $('cs-results').style.display = 'none';
-                $('cs-status').textContent = 'Type at least 2 characters...';
+                $('cs-status').textContent = 'Type at least 2 characters…';
                 return;
             }
             csTimeout = setTimeout(() => fetchCustomers(q), 400);
@@ -406,60 +383,45 @@
 
         async function loadCustomerJobs(custId, rowElem) {
             let container = rowElem.nextElementSibling;
-            const expander = rowElem.querySelector('.customer-expander');
-            
+            const chevron = rowElem.querySelector('.cust-chevron');
+
             if (container && container.classList.contains('customer-jobs-inline')) {
-                // toggle
-                if (container.style.display === 'none') {
-                    container.style.display = 'block';
-                    if (expander) expander.textContent = '▾';
-                } else {
-                    container.style.display = 'none';
-                    if (expander) expander.textContent = '▸';
-                }
+                const hidden = container.style.display === 'none';
+                container.style.display = hidden ? 'flex' : 'none';
+                if (chevron) chevron.textContent = hidden ? '▾' : '▸';
                 return;
             }
 
-            // Create container
-            if (expander) expander.textContent = '▾';
+            if (chevron) chevron.textContent = '▾';
             container = document.createElement('div');
             container.className = 'customer-jobs-inline';
-            container.style.background = '#fcfcfc';
-            container.style.borderBottom = '1px solid #eee';
-            container.style.padding = '10px 15px';
-            container.innerHTML = '<div style="padding:15px;text-align:center;color:#666;font-size:0.9rem;">Loading priority jobs...</div>';
+            container.innerHTML = '<div class="jobs-status">Loading jobs…</div>';
             rowElem.parentNode.insertBefore(container, rowElem.nextSibling);
 
             try {
                 const res = await fetch('/api/customers/' + custId + '/jobs');
                 const data = await res.json();
-                
                 if (data.jobs && data.jobs.length > 0) {
                     container.innerHTML = data.jobs.map(j => {
-                        let statusColor = 'var(--accent)';
-                        const sl = j.stage.toLowerCase();
-                        if (sl.includes('progress')) statusColor = '#0369a1';
-                        if (sl.includes('pending')) statusColor = '#92400e';
-                        if (sl.includes('completed') || sl.includes('invoiced')) statusColor = '#16a34a';
-                        
+                        const sl = (j.stage || '').toLowerCase();
+                        let bcls = 'b-pending';
+                        if (sl.includes('progress')) bcls = 'b-progress';
+                        else if (sl.includes('completed') || sl.includes('invoiced')) bcls = 'b-done';
                         return `
-                        <div class="job-item" onclick="selectJobFromSearch('${j.id}')">
-                            <div class="job-item-header">
-                                <span>${j.name}</span>
-                                <span style="color:var(--accent);">#${j.id}</span>
-                            </div>
-                            <div class="job-item-site">📍 ${j.site}</div>
-                            <div class="job-item-meta">
-                                <span>Status: <strong style="color:${statusColor};">${j.stage}</strong></span>
-                                <span>📅 ${j.date}</span>
-                            </div>
-                        </div>
-                    `;}).join('');
+                        <button type="button" class="job-row" onclick="selectJobFromSearch('${j.id}')">
+                            <span class="job-badge ${bcls}">${j.stage}</span>
+                            <span class="job-body">
+                                <span class="job-line1"><span class="job-name">${j.name}</span><span class="job-id">#${j.id}</span></span>
+                                <span class="job-line2">📍 ${j.site} &nbsp;·&nbsp; 📅 ${j.date}</span>
+                            </span>
+                            <span class="job-go" aria-hidden="true">→</span>
+                        </button>`;
+                    }).join('');
                 } else {
-                    container.innerHTML = '<div style="padding:15px;text-align:center;color:#666;font-size:0.9rem;">No Active or Pending jobs found.</div>';
+                    container.innerHTML = '<div class="jobs-status">No active or pending jobs found.</div>';
                 }
             } catch (err) {
-                container.innerHTML = '<div style="padding:15px;text-align:center;color:red;font-size:0.9rem;">Error loading jobs.</div>';
+                container.innerHTML = '<div class="jobs-status jobs-error">Error loading jobs.</div>';
             }
         }
 
