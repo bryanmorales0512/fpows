@@ -98,6 +98,40 @@
     <div class="page-wrapper">
         <div id="error-banner"></div>
 
+        <!-- Job Overview — scannable operational summary (screen only) -->
+        <section id="job-overview" class="job-overview" style="display:none" aria-live="polite">
+            <div class="jo-head">
+                <div class="jo-headmain">
+                    <div class="jo-client" id="jo-client">—</div>
+                    <div class="jo-site" id="jo-site">—</div>
+                    <div class="jo-contact" id="jo-contact"></div>
+                </div>
+                <div class="jo-jobtag">Job <span id="jo-jobid">—</span></div>
+            </div>
+            <div class="jo-stats">
+                <div class="jo-stat jo-stat-primary">
+                    <div class="jo-stat-label">Outstanding works</div>
+                    <div class="jo-stat-value" id="jo-count">—</div>
+                    <div class="jo-stat-sub" id="jo-count-sub"></div>
+                </div>
+                <div class="jo-stat">
+                    <div class="jo-stat-label">6-Monthly service</div>
+                    <div class="jo-stat-value" id="jo-6mo">—</div>
+                </div>
+                <div class="jo-stat">
+                    <div class="jo-stat-label">12-Monthly service</div>
+                    <div class="jo-stat-value" id="jo-12mo">—</div>
+                </div>
+                <div class="jo-stat" id="jo-afss-tile">
+                    <div class="jo-stat-label">AFSS due</div>
+                    <div class="jo-stat-value" id="jo-afss">—</div>
+                    <div class="jo-stat-sub" id="jo-afss-sub"></div>
+                </div>
+            </div>
+            <div class="jo-works-head">Outstanding works</div>
+            <div class="jo-works" id="jo-works"></div>
+        </section>
+
         <div class="page-layout">
             <!-- FPOWS Form -->
             <div id="fpows-form">

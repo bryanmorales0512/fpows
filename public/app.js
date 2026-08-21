@@ -242,6 +242,64 @@
                     tbody.appendChild(tr);
                 });
             }
+
+            // ---- Job Overview (scannable summary; screen only) ----
+            try {
+                const ov = $('job-overview');
+                if (ov) {
+                    const setText = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+                    setText('jo-client', data.Client || '—');
+                    const siteLine = [data.Site, data.SiteArea].filter(x => x && x !== 'N/A').join('  ·  ');
+                    setText('jo-site', siteLine || '—');
+                    setText('jo-jobid', '#' + (data.JobID || '—'));
+                    const contact = [data.SiteContact?.Name, data.SiteContact?.Phone].filter(Boolean).join('  ·  ');
+                    setText('jo-contact', contact ? ('👤 ' + contact) : '');
+
+                    setText('jo-6mo', sixMonth ? (sixMonth + (sixYear ? ' ' + sixYear : '')) : '—');
+                    setText('jo-12mo', twelveMonth ? (twelveMonth + (twelveYear ? ' ' + twelveYear : '')) : '—');
+
+                    const afss = data.AFSSDue || '—';
+                    setText('jo-afss', afss);
+                    let overdueAfss = false;
+                    const m = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/.exec(afss || '');
+                    if (m) { overdueAfss = new Date(+m[3], +m[2] - 1, +m[1]) < new Date(); }
+                    const afssTile = $('jo-afss-tile');
+                    if (afssTile) afssTile.classList.toggle('is-overdue', overdueAfss);
+                    setText('jo-afss-sub', overdueAfss ? '⚠ Overdue' : (m ? 'Upcoming' : ''));
+
+                    let pend = 0, prog = 0;
+                    works.forEach(w => {
+                        const s = (w.DisplayStatus || w.Status || '').toLowerCase();
+                        if (s.includes('progress')) prog++; else pend++;
+                    });
+                    setText('jo-count', String(works.length));
+                    setText('jo-count-sub', works.length ? (pend + ' pending · ' + prog + ' in progress') : 'None outstanding');
+
+                    const jw = $('jo-works');
+                    if (jw) {
+                        if (works.length === 0) {
+                            jw.innerHTML = '<div class="jo-empty">✔ No outstanding works for this site.</div>';
+                        } else {
+                            jw.innerHTML = works.map(w => {
+                                const s = (w.DisplayStatus || w.Status || 'PENDING').toLowerCase();
+                                let bc = 'b-pending', label = 'Pending';
+                                if (s.includes('progress')) { bc = 'b-progress'; label = 'In Progress'; }
+                                else if (s.includes('complete')) { bc = 'b-done'; label = 'Completed'; }
+                                const issue = summarizeIssue(w.Issue || '') || (w.Issue || '—');
+                                return '<div class="jo-work">'
+                                    + '<span class="job-badge ' + bc + '">' + label + '</span>'
+                                    + '<div class="jo-work-body">'
+                                    + '<div class="jo-work-top"><span class="jo-work-eq">' + escHtml(w.EquipmentType || 'Works') + '</span>'
+                                    + (w.Job ? '<span class="jo-work-id">' + escHtml(w.Job) + '</span>' : '') + '</div>'
+                                    + '<div class="jo-work-issue">' + escHtml(issue) + '</div>'
+                                    + '</div></div>';
+                            }).join('');
+                        }
+                    }
+                    ov.style.display = 'block';
+                }
+                const je = $('job-empty'); if (je) je.style.display = 'none';
+            } catch (e) { console.warn('[overview] render skipped:', e); }
         }
 
         // --- History Logic ---
