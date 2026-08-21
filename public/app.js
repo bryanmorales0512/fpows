@@ -1642,10 +1642,15 @@ function railBack() {
   if (box && window._railBackHtml != null) { box.innerHTML = window._railBackHtml; }
 }
 
-/* ── Overview drawer (open/close) ── */
-window.addEventListener('load', function () {
-  var open = document.getElementById('btn-summary');
-  var close = document.getElementById('jo-close');
-  if (open) open.addEventListener('click', function () { document.body.classList.toggle('drawer-open'); });
-  if (close) close.addEventListener('click', function () { document.body.classList.remove('drawer-open'); });
+/* ── Overview drawer (open/close) — delegated so it always works ── */
+document.addEventListener('click', function (e) {
+  var t = e.target && e.target.closest ? e.target.closest('#jo-close, #btn-summary') : null;
+  if (!t) return;
+  e.preventDefault();
+  if (t.id === 'jo-close') document.body.classList.remove('drawer-open');
+  else document.body.classList.toggle('drawer-open');
+});
+// Close the drawer on Escape
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') document.body.classList.remove('drawer-open');
 });
