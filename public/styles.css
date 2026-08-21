@@ -1859,3 +1859,30 @@
 
 /* Brand logo — slightly larger for legibility of the wordmark */
 @media screen { .control-bar .brand .brand-logo { height: 34px; max-width: 190px; } }
+
+/* ==========================================================================
+   FPOWS — CONTRAST / READABILITY PASS (screen-only)
+   Ensure secondary text and labels stay legible in BOTH themes.
+   ========================================================================== */
+@media screen {
+  /* Light: darker muted/faint so labels + IDs are readable on white */
+  :root, :root[data-theme="light"] {
+    --muted: #5c5854;   /* ~6.6:1 on --surface */
+    --faint: #767068;   /* ~4.4:1 on --surface */
+  }
+  /* Dark: lighter muted/faint so they read on dark surfaces */
+  @media (prefers-color-scheme: dark) {
+    :root { --muted: #b6b0a9; --faint: #948e86; }
+  }
+  :root[data-theme="dark"] { --muted: #b6b0a9; --faint: #948e86; }
+
+  /* Placeholders shouldn't vanish */
+  ::placeholder { color: var(--faint); opacity: 1; }
+  #cs-input::placeholder { color: var(--faint); }
+
+  /* Subtle-but-present hover on rail rows in both themes */
+  .cust-row:hover { background: color-mix(in oklab, var(--brand) 7%, var(--surface)); }
+  .jrow:hover, .job-row:hover { border-color: var(--brand); }
+
+  /* Keep the AFSS/overdue and status text strong in dark too (already token-based) */
+}
