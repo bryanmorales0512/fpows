@@ -1886,3 +1886,72 @@
 
   /* Keep the AFSS/overdue and status text strong in dark too (already token-based) */
 }
+
+/* ── Rail sort / filter controls (screen-only) ── */
+@media screen {
+  .rail-controls { display: flex; align-items: center; gap: 10px; margin-top: 11px; flex-wrap: wrap; }
+  .rail-controls > label[for="rail-sort"] { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+  #rail-sort {
+    flex: 1; min-width: 0; height: 32px; padding: 0 10px; font: inherit; font-size: 12.5px;
+    background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  }
+  #rail-sort:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); }
+  .rail-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+  .rail-toggle input { accent-color: var(--brand); width: 14px; height: 14px; cursor: pointer; }
+}
+
+/* ==========================================================================
+   FPOWS — SINGLE CLEAN THEME (2026)
+   One calm, low-glare light theme. Dark mode removed; no harsh pure-white.
+   This block is LAST, so it overrides every earlier :root / dark-mode token.
+   ========================================================================== */
+@media screen {
+  :root,
+  :root[data-theme="light"],
+  :root[data-theme="dark"] {
+    /* soft, slightly-warm neutrals — no pure #fff glare */
+    --bg:        #eceae6;
+    --surface:   #f7f5f2;
+    --surface-2: #efede8;
+    --rail:      #f1efea;
+    --border:    #e1ded7;
+    --border-strong: #cfcbc2;
+    --text:      #292520;
+    --muted:     #625d56;
+    --faint:     #8a847a;
+    --brand:     #c62222;
+    --brand-strong: #a81d1d;
+    --brand-ink: #ffffff;
+    --ring:      rgba(198,34,34,.26);
+    --amber: #9a5207; --amber-bg: #f4e8d1;
+    --blue:  #0b6699; --blue-bg:  #e2edf4;
+    --green: #1a7a3d; --green-bg: #e1efe5;
+    --red:   #b51c1c; --red-soft: #b51c1c; --red-bg: #f6e5e4;
+    /* paper reads as a document but softened on screen (print stays #fff) */
+    --paper: #fcfbf8; --paper-ink: #232019; --paper-2: #f3f1ec; --paper-border: #e6e3dd;
+    --sh-1: 0 1px 2px rgba(30,26,22,.05);
+    --sh-2: 0 6px 20px -8px rgba(30,26,22,.12), 0 2px 6px rgba(30,26,22,.05);
+    --sh-doc: 0 26px 60px -26px rgba(30,26,22,.24), 0 6px 16px -8px rgba(30,26,22,.08);
+    color-scheme: light;
+  }
+  /* Neutralize OS dark preference — keep the same calm theme */
+  @media (prefers-color-scheme: dark) {
+    :root, :root[data-theme="light"], :root[data-theme="dark"] {
+      --bg:#eceae6; --surface:#f7f5f2; --surface-2:#efede8; --rail:#f1efea;
+      --border:#e1ded7; --border-strong:#cfcbc2; --text:#292520; --muted:#625d56; --faint:#8a847a;
+      --brand:#c62222; --brand-strong:#a81d1d; --ring:rgba(198,34,34,.26);
+      --amber:#9a5207; --amber-bg:#f4e8d1; --blue:#0b6699; --blue-bg:#e2edf4;
+      --green:#1a7a3d; --green-bg:#e1efe5; --red:#b51c1c; --red-soft:#b51c1c; --red-bg:#f6e5e4;
+      --paper:#fcfbf8; --paper-ink:#232019; --paper-2:#f3f1ec; --paper-border:#e6e3dd;
+      color-scheme: light;
+    }
+  }
+  html { color-scheme: light; }
+
+  /* Rail uses its own soft tone */
+  .master-rail { background: var(--rail); }
+
+  /* Logo: always its real colors (no dark invert), and any leftover toggle hidden */
+  .control-bar .brand .brand-logo { filter: none !important; opacity: 1 !important; }
+  #btn-theme { display: none !important; }
+}

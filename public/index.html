@@ -26,7 +26,6 @@
                 <button class="btn btn-outline" id="btn-publish" style="display:none">Save and Sent to Email</button>
                 <button class="btn btn-outline" id="btn-history">📋 History</button>
                 <button class="btn btn-outline" id="btn-print" style="display:none">🖨 Print</button>
-                <button class="btn btn-outline btn-icon" id="btn-theme" title="Toggle light / dark" aria-label="Toggle light / dark"><span class="theme-ico">🌙</span></button>
 
                 <!-- Hidden inputs for logic compatibility -->
                 <select id="schedule-select" style="display:none">
@@ -87,6 +86,15 @@
                 <div id="cs-search-view">
                     <input type="text" id="cs-input" placeholder="Search customer or site…" autocomplete="off">
                     <div id="cs-status"></div>
+                </div>
+                <div class="rail-controls">
+                    <label for="rail-sort">Sort</label>
+                    <select id="rail-sort">
+                        <option value="recent">Most recent</option>
+                        <option value="name">Name A–Z</option>
+                        <option value="overdue">Overdue first</option>
+                    </select>
+                    <label class="rail-toggle"><input type="checkbox" id="rail-overdue-only"> Overdue only</label>
                 </div>
             </div>
             <div id="cs-results" style="display:none"></div>

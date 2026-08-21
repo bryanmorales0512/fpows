@@ -382,8 +382,16 @@
                 if (data.results && data.results.length > 0) {
                     resultsBox.style.display = 'block';
                     $('cs-status').innerHTML = q ? `Found ${data.results.length} result(s)${freshTag}` : `${data.results.length} recent customers · type to search${freshTag}`;
-                    const majors = data.results.filter(c => c.priority);
-                    const regulars = data.results.filter(c => !c.priority);
+                    let rows = data.results;
+                    if (typeof railOverdueOnly !== 'undefined' && railOverdueOnly) rows = rows.filter(c => c.overdue);
+                    const sortFn = (a, b) => {
+                        const mode = (typeof railSort !== 'undefined') ? railSort : 'recent';
+                        if (mode === 'name') return (a.name || '').localeCompare(b.name || '');
+                        if (mode === 'overdue') return (b.overdue ? 1 : 0) - (a.overdue ? 1 : 0) || (b.latestActivity || 0) - (a.latestActivity || 0);
+                        return (b.latestActivity || 0) - (a.latestActivity || 0); // recent
+                    };
+                    const majors = rows.filter(c => c.priority).sort(sortFn);
+                    const regulars = rows.filter(c => !c.priority).sort(sortFn);
 
                     const chip = (txt, cls) => `<span class="chip ${cls || ''}">${txt}</span>`;
                     const renderItem = (c) => {
@@ -1508,4 +1516,18 @@ function toggleOvIssue(btn) {
 window.addEventListener('load', function () {
     try { if (typeof fetchCustomers === 'function') fetchCustomers('', true); }
     catch (e) { console.warn('[rail] init:', e); }
+});
+
+/* ── Rail: sort + overdue filter ── */
+var railSort = 'recent';
+var railOverdueOnly = false;
+window.addEventListener('load', function () {
+    var sel = document.getElementById('rail-sort');
+    var ov = document.getElementById('rail-overdue-only');
+    var reRun = function () {
+        var q = (document.getElementById('cs-input') || {}).value || '';
+        if (typeof fetchCustomers === 'function') fetchCustomers(q.trim());
+    };
+    if (sel) sel.addEventListener('change', function () { railSort = sel.value; reRun(); });
+    if (ov) ov.addEventListener('change', function () { railOverdueOnly = ov.checked; reRun(); });
 });
