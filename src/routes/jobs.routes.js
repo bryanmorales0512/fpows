@@ -11,7 +11,7 @@ jobsRouter.get('/api/job/:id', async (req, res) => {
         return res.status(400).json({ error: 'Invalid job ID' });
     }
     try {
-        const result = await fetchFpowData(jobId);
+        const result = await fetchFpowData(jobId, { force: req.query.force === '1' });
         res.json(result);
     } catch (err) {
         res.status(500).json({ error: err.message });

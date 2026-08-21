@@ -512,7 +512,7 @@
         }
 
         // Core fetch function
-        async function fetchJob() {
+        async function fetchJob(force) {
             const jobId = $('job-id-input').value.trim();
             if (!jobId) { showError('Please enter a Job ID.'); return; }
 
@@ -522,7 +522,7 @@
             $('status-pill').textContent = 'Loading...';
 
             try {
-                const res = await fetch('/api/job/' + jobId);
+                const res = await fetch('/api/job/' + jobId + (force ? '?force=1' : ''));
                 const data = await res.json();
                 if (!res.ok || data.error) throw new Error(data.error || 'HTTP ' + res.status);
 
@@ -568,7 +568,7 @@
             }
         }
 
-        $('btn-fetch').addEventListener('click', fetchJob);
+        $('btn-fetch').addEventListener('click', function () { fetchJob(true); });
         $('job-id-input').addEventListener('keydown', e => { if (e.key === 'Enter') fetchJob(); });
         $('btn-print').addEventListener('click', () => window.print());
         $('btn-publish').addEventListener('click', () => publishJob(false));

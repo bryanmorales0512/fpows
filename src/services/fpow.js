@@ -75,7 +75,19 @@ export async function syncAssetDates(siteId, jobDate, jobType) {
  * Shared logic for data aggregation.
  * Can be called by the MCP tool or the REST API.
  */
-export const fetchFpowData = async (jobId) => {
+// Short-TTL in-memory cache for aggregated job data. Opening a job fires many
+// simPRO calls; caching collapses repeated opens / back-and-forth navigation so
+// we don't re-hit simPRO every time (rate-limit protection). Pass { force: true }
+// (e.g. the Reload button) to bypass and fetch fresh.
+const _jobCache = new Map();
+const JOB_CACHE_TTL_MS = parseInt(process.env.JOB_CACHE_TTL_MS || '45000', 10);
+
+export const fetchFpowData = async (jobId, opts = {}) => {
+    const _cacheKey = String(jobId);
+    if (!opts.force) {
+        const _hit = _jobCache.get(_cacheKey);
+        if (_hit && (Date.now() - _hit.t) < JOB_CACHE_TTL_MS) return _hit.data;
+    }
     const jobRes = await getSimpro(`/api/v1.0/companies/${COMPANY_ID}/jobs/${jobId}`);
     const jobData = jobRes.data;
 
@@ -457,5 +469,6 @@ export const fetchFpowData = async (jobId) => {
         syncAssetDates(siteId, jobData.DateIssued, jobType).catch(e => console.error("AutoSync catch:", e));
     }
 
+    _jobCache.set(_cacheKey, { t: Date.now(), data: result });
     return result;
 };
