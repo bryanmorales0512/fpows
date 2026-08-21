@@ -1742,3 +1742,20 @@
 
 /* Job overview must never print — the paper call sheet is the print artifact */
 @media print { #job-overview { display: none !important; } }
+
+/* ==========================================================================
+   FPOWS — brand logo in the app bar (use the real /logo.png, consistent
+   with the printed call sheet). Screen only.
+   ========================================================================== */
+@media screen {
+  .control-bar .brand { gap: 10px; }
+  .control-bar .brand .brand-logo {
+    height: 30px; width: auto; display: block; flex-shrink: 0;
+  }
+  /* Dark theme: the logo has black text — render it as a clean white lockup */
+  @media (prefers-color-scheme: dark) {
+    .control-bar .brand .brand-logo { filter: brightness(0) invert(1); opacity: .95; }
+  }
+  :root[data-theme="dark"] .control-bar .brand .brand-logo { filter: brightness(0) invert(1); opacity: .95; }
+  :root[data-theme="light"] .control-bar .brand .brand-logo { filter: none; opacity: 1; }
+}
